@@ -1,0 +1,7 @@
+# PyCharm shenanigans
+.idea/*
+.venv/*
+
+pyboy stuff
+*.gb
+*.gb.*

@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "slack-plays-pokemon"
+version = "0.1.0"
+description = ""
+authors = ["AyaPK <aya.pk.contact@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pyboy = "^2.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
