@@ -120,7 +120,49 @@ files = [
     {file = "pysdl2_dll-2.30.2-py2.py3-none-win_amd64.whl", hash = "sha256:1f243b9bd3f48a782f9feec26c261b0ae5ffbc3aa78756c5853e992fa5e7dfcf"},
 ]
 
+[[package]]
+name = "python-dotenv"
+version = "1.0.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
+    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
+name = "slack-bolt"
+version = "1.19.1"
+description = "The Bolt Framework for Python"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "slack_bolt-1.19.1-py2.py3-none-any.whl", hash = "sha256:b916829ece0ff7a2cae1502f1774fd100592cd8a81a39e4f04e3137a3f19522b"},
+    {file = "slack_bolt-1.19.1.tar.gz", hash = "sha256:a3041d8f49eba22c3be4dd8f57602d6685d367c0e1cc7619260e1ce4a363d07f"},
+]
+
+[package.dependencies]
+slack-sdk = ">=3.25.0,<4"
+
+[[package]]
+name = "slack-sdk"
+version = "3.31.0"
+description = "The Slack API Platform SDK for Python"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "slack_sdk-3.31.0-py2.py3-none-any.whl", hash = "sha256:a120cc461e8ebb7d9175f171dbe0ded37a6878d9f7b96b28e4bad1227399047b"},
+    {file = "slack_sdk-3.31.0.tar.gz", hash = "sha256:740d2f9c49cbfcbd46fca56b4be9d527934c225312aac18fd2c0fca0ef6bc935"},
+]
+
+[package.extras]
+optional = ["SQLAlchemy (>=1.4,<3)", "aiodns (>1.0)", "aiohttp (>=3.7.3,<4)", "boto3 (<=2)", "websocket-client (>=1,<2)", "websockets (>=9.1,<13)"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0e55de73496772ea2338d83b723ffcd1ab898a7ada721e1a850fe60fd3a7c4cc"
+content-hash = "ba810e246b04fd5a6ca226147207eb83193bacb28a210ee7ba4d91b352e5e40b"
