@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 pyboy = "^2.2.1"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

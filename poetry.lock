@@ -120,7 +120,21 @@ files = [
     {file = "pysdl2_dll-2.30.2-py2.py3-none-win_amd64.whl", hash = "sha256:1f243b9bd3f48a782f9feec26c261b0ae5ffbc3aa78756c5853e992fa5e7dfcf"},
 ]
 
+[[package]]
+name = "python-dotenv"
+version = "1.0.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
+    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0e55de73496772ea2338d83b723ffcd1ab898a7ada721e1a850fe60fd3a7c4cc"
+content-hash = "7dce7fff88c8b98015f9cf71bd8e443070ec70f81fd30e52c5dbc2324ac4a14b"

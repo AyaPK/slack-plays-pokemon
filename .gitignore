@@ -1,7 +1,9 @@
 # PyCharm shenanigans
 .idea/*
 .venv/*
+*.xml
+*.iml
 
-pyboy stuff
+# pyboy stuff
 *.gb
 *.gb.*
