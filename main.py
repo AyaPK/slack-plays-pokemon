@@ -1,5 +1,12 @@
+import os
+
+from dotenv import load_dotenv
+
+
 def main():
-    print("Hello World!")
+    load_dotenv()
+
+    print(os.getenv("SLACK_TOKEN"))
 
 
 if __name__ == "__main__":
