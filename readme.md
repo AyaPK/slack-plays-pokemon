@@ -35,3 +35,7 @@ Create a Slack app with the appropriate read/write permissions, then add the `xo
 
 ## Emulation
 This project emulates Pokémon Blue (and possibly supports Pokémon Red unofficially). You will need your own legally dumped cartridge as a `.gb` file in the root of the project to run it.
+
+## Acknowledgements
+- [PyBoy](https://github.com/Baekalfen/PyBoy) - Used to emulate a headless Gameboy and store the game state
+- [bolt-python](https://github.com/slackapi/bolt-python) - A Python framework used to easily build Slack apps
