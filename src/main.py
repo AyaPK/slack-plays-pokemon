@@ -1,4 +1,4 @@
-from slack_bot import start_slack_bot
+from src.bot.slack_bot import start_slack_bot
 
 
 def main():
