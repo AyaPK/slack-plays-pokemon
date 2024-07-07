@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import Self
 from pyboy import PyBoy
 
 
@@ -28,4 +30,27 @@ def pyboy_tick(button=""):
     pyboy.screen.image.resize((480, 432), 0).save("data/image.png")
     with open("data/state_file.state", "wb") as f:
         pyboy.save_state(f)
+
+    game_info = GameInformation.from_pyboy(pyboy)
+
     pyboy.stop()
+
+    return game_info
+
+
+@dataclass
+class GameInformation:
+    player_name: str
+
+    @classmethod
+    def from_pyboy(pyboy) -> Self:
+        return GameInformation(
+            player_name=pyboy.memory[0x2598:0x2598 + 0xB],
+        )
+
+    def as_markdown(self) -> str:
+        return f"""
+# Game Data
+
+Name: {self.player_name}
+"""

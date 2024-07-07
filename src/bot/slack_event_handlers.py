@@ -1,6 +1,8 @@
 import json
 import os
 import time
+
+from slack_sdk import WebClient
 from integration.pyboy_integration import pyboy_tick
 from state.state_manager import state_manager, save_state
 
@@ -12,7 +14,8 @@ def handle_input(event, say, client, button):
         last_message = event["item"]
 
     button = button.replace("arrow_", "")
-    pyboy_tick(button)
+    game_info = pyboy_tick(button)
+
     local_image_path = "data/image.png"
     upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
 
@@ -53,6 +56,9 @@ def add_reactions(client, timestamp, channel):
             timestamp=timestamp
         )
 
+        ensure_canvas_exists(client, last_message["channel"])
+        update_canvas_with_game_info(client, game_info)
+
 
 def calculate_reactions(client, say, event):
     last_message = state_manager.get_last_message()
@@ -85,3 +91,32 @@ def get_priority(key):
         return priority_order.index(key)
     except ValueError:
         return ""
+
+
+def ensure_canvas_exists(client: WebClient, channel_id):
+    if state_manager.canvas is not None:
+        return state_manager.canvas
+
+    response = client.conversations_info(channel=channel_id).validate()
+
+    try:
+        canvas_id = response["channel"]["properties"]["canvas"]["file_id"]
+    except:
+        # Canvas doesn't exist. Create it
+        create_canvas_response = client.conversations_canvases_create(channel_id=channel_id).validate()
+        canvas_id = create_canvas_response["canvas_id"]
+
+    state_manager.canvas = canvas_id
+
+
+def update_canvas_with_game_info(client, game_info):
+    client.canvases_edit(
+        canvas_id=state_manager.canvas,
+        changes=[{
+            "operation": "replace",
+            "document_content": {
+                "type": "markdown",
+                "markdown": game_info.as_markdown()
+            }
+        }]
+    )
