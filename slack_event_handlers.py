@@ -35,3 +35,15 @@ def handle_input(event, say, client):
                     name=emoji,
                     timestamp=timestamp
                 )
+
+
+def calculate_reactions(client, event):
+    last_message = state_manager.get_last_message()
+
+    if not last_message:
+        state_manager.set_last_message(event["item"])
+        last_message = event["item"]
+
+    response = client.reactions_get(channel=last_message["channel"], timestamp=last_message["ts"])
+    reactions = response["message"].get("reactions", [])
+    return reactions
