@@ -43,7 +43,7 @@ class GameInformation:
     player_name: str
 
     @classmethod
-    def from_pyboy(pyboy) -> Self:
+    def from_pyboy(cls, pyboy) -> Self:
         return GameInformation(
             player_name=pyboy.memory[0x2598:0x2598 + 0xB],
         )
