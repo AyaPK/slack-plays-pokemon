@@ -1,6 +1,7 @@
 # Slack Plays Pokemon
 
 ### A dumb idea spawned during a totally unrelated hackathon
+Emulates Pokémon gen 1 in a Slack channel, allowing a group of players to collaboratively explore Kanto together :)
 
 ## System Requirements
 
