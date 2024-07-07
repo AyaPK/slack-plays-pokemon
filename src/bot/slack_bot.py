@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from slack_event_handlers import handle_input, calculate_reactions
+from src.bot.slack_event_handlers import handle_input, calculate_reactions
 
 load_dotenv()
 
