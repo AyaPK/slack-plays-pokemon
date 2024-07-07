@@ -27,22 +27,26 @@ def start_slack_bot():
     handler.start()
 
 
-@app.event("app_mention")
-def respond_to_mention(event, say, client):
+@app.event("reaction_added")
+def handle_input(event, say, client):
     global last_message
 
-    button = re.sub(r'<@\w+>', '', event["text"]).strip()
+    if not last_message:
+        last_message = event["item"]
+
+    button = event["reaction"].replace("arrow_", "")
     pyboy_tick(button)
 
     local_image_path = "image.png"
     response = client.files_upload_v2(
         file=local_image_path,
         title="pokemon_screenshot",
-        channel=event["channel"]
+        channel=event["item"]["channel"]
     )
 
     if response["ok"]:
-        time.sleep(2)
+        client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
+        time.sleep(3)
         last_message = say("Select the next input:")
 
         if "ts" in last_message:
@@ -50,13 +54,10 @@ def respond_to_mention(event, say, client):
             timestamp = last_message["ts"]
             for emoji in reacts:
                 client.reactions_add(
-                    channel=event["channel"],
+                    channel=event["item"]["channel"],
                     name=emoji,
                     timestamp=timestamp
                 )
-
-    else:
-        print("File upload failed:", response["error"])
 
 
 def pyboy_tick(button=""):
@@ -75,7 +76,7 @@ def pyboy_tick(button=""):
         pyboy.tick(2)
 
     pyboy.tick(500)
-    pyboy.screen.image.save("image.png")
+    pyboy.screen.image.resize((480, 432), 0).save("image.png")
     with open("state_file.state", "wb") as f:
         pyboy.save_state(f)
     pyboy.stop()
