@@ -8,9 +8,9 @@ from state.state_manager import state_manager, save_state
 
 
 def handle_input(event, say, client, button):
-    last_message = state_manager.get_last_message()
+    last_message = state_manager.last_message
     if not last_message:
-        state_manager.set_last_message(event["item"])
+        state_manager.last_message = event["item"]
         last_message = event["item"]
 
     button = button.replace("arrow_", "")
@@ -22,9 +22,8 @@ def handle_input(event, say, client, button):
     if upload_response["ok"]:
         delete_last_message(client, last_message)
         time.sleep(3)
-        new_message = say("Vote for the next input:")
-        state_manager.set_last_message(new_message)
-        last_message = state_manager.get_last_message()
+        last_message = say("Vote for the next input:")
+        state_manager.last_message = last_message
 
         if "ts" in last_message:
             add_reactions(client, last_message["ts"], event["item"]["channel"])
@@ -61,9 +60,9 @@ def add_reactions(client, timestamp, channel):
 
 
 def calculate_reactions(client, say, event):
-    last_message = state_manager.get_last_message()
+    last_message = state_manager.last_message
     if not last_message:
-        state_manager.set_last_message(event["item"])
+        state_manager.last_message = event["item"]
         last_message = event["item"]
 
     response = client.reactions_get(channel=last_message["channel"], timestamp=last_message["ts"])
