@@ -2,17 +2,20 @@ from pyboy import PyBoy
 
 
 def save_initial_state():
-    with PyBoy("blue.gb") as pyboy, open("state_file.state", "wb") as f:
+    with PyBoy("blue.gb", window="null", cgb=True) as pyboy, open("state_file.state", "wb") as f:
         pyboy.save_state(f)
 
 
 def pyboy_tick(button=""):
     valid_buttons = ["a", "b", "up", "down", "left", "right", "start", "select"]
 
-    pyboy = PyBoy("blue.gb", window="null")
+    pyboy = PyBoy("blue.gb", window="null", cgb=True)
     pyboy.set_emulation_speed(100)
-    with open("state_file.state", "rb") as f:
-        pyboy.load_state(f)
+    try:
+        with open("state_file.state", "rb") as f:
+            pyboy.load_state(f)
+    except FileNotFoundError:
+        save_initial_state()
 
     button = button.lower()
     if button in valid_buttons:
