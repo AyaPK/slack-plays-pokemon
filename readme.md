@@ -47,6 +47,12 @@ Create a Slack app with the appropriate read/write permissions and socket mode e
 - app_mention
 - reaction_added
 
+## Slack server
+This currently works out-of-the-box for the most part, however a few changes may need to be made to allow the bot to function properly.
+
+- A custom react named `:start:`
+- A custom react named `:select:`
+
 ## Emulation
 This project emulates Pokémon Blue (and possibly supports Pokémon Red unofficially). You will need your own legally dumped cartridge as a `.gb` file in the root of the project to run it.
 
