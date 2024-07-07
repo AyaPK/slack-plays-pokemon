@@ -60,7 +60,7 @@ This currently works out-of-the-box for the most part, however a few changes may
 - A custom react named `:select:`
 
 ## Emulation
-This project emulates Pokémon Blue (and possibly supports Pokémon Red unofficially). You will need your own legally dumped cartridge as a `.gb` file in the root of the project to run it.
+This project emulates Pokémon Blue (and possibly supports Pokémon Red unofficially). You will need your own legally dumped cartridge as a `.gb` file in the `/data` folder to run it.
 
 ## Acknowledgements
 - [PyBoy](https://github.com/Baekalfen/PyBoy) - Used to emulate a headless Gameboy and store the game state
