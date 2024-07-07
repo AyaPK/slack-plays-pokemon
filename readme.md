@@ -3,6 +3,8 @@
 ### A dumb idea spawned during a totally unrelated hackathon
 Emulates Pokémon gen 1 in a Slack channel, allowing a group of players to collaboratively explore Kanto together :)
 
+![image](https://github.com/AyaPK/slack-plays-pokemon/assets/47668950/7f58819f-9ad2-4feb-9440-b615033a8902)
+
 ## System Requirements
 
 SlackPlaysPokémon uses poetry for Python to create an isolated environment and manage package dependencies.
