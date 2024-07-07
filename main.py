@@ -1,5 +1,6 @@
 import os
 import re
+import time
 
 from dotenv import load_dotenv
 from slack_bolt import App
@@ -8,6 +9,7 @@ from pyboy import PyBoy
 
 load_dotenv()
 app = App(token=os.getenv('SLACK_TOKEN'))
+last_message = None
 
 
 def main():
@@ -27,17 +29,34 @@ def start_slack_bot():
 
 @app.event("app_mention")
 def respond_to_mention(event, say, client):
-    pyboy_tick()
+    global last_message
+
     button = re.sub(r'<@\w+>', '', event["text"]).strip()
     pyboy_tick(button)
 
     local_image_path = "image.png"
-    client.files_upload_v2(
+    response = client.files_upload_v2(
         file=local_image_path,
         title="pokemon_screenshot",
-        initial_comment="Here is the next image",
         channel=event["channel"]
     )
+
+    if response["ok"]:
+        time.sleep(2)
+        last_message = say("Select the next input:")
+
+        if "ts" in last_message:
+            reacts = ["arrow_up", "arrow_down", "arrow_left", "arrow_right", "a", "b"]
+            timestamp = last_message["ts"]
+            for emoji in reacts:
+                client.reactions_add(
+                    channel=event["channel"],
+                    name=emoji,
+                    timestamp=timestamp
+                )
+
+    else:
+        print("File upload failed:", response["error"])
 
 
 def pyboy_tick(button=""):
