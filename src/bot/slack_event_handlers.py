@@ -50,10 +50,9 @@ def calculate_reactions(client, say, event):
     reaction_counts = {}
 
     for reaction in reactions:
-        valid_reacts = ['b', 'a', 'arrow_down', 'arrow_up', 'arrow_left', 'arrow_right']
         emoji = reaction["name"]
         count = reaction["count"]
-        if count > 1 and emoji in valid_reacts:
+        if count > 1 and emoji in json.loads(os.getenv('VALID_REACTIONS')):
             reaction_counts[emoji] = count - 1
 
     try:
