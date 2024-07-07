@@ -1,8 +1,8 @@
 import json
 import os
 import time
-from src.integration.pyboy_integration import pyboy_tick
-from src.state.state_manager import state_manager
+from integration.pyboy_integration import pyboy_tick
+from state.state_manager import state_manager
 
 
 def handle_input(event, say, client, button):
@@ -14,7 +14,7 @@ def handle_input(event, say, client, button):
     button = button.replace("arrow_", "")
     pyboy_tick(button)
 
-    local_image_path = "../data/image.png"
+    local_image_path = "data/image.png"
     response = client.files_upload_v2(
         file=local_image_path,
         title=f"Winning input: {button if button else 'None'}",
