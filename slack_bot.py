@@ -1,48 +1,66 @@
-import json
 import os
 import time
-from slack_sdk import errors
+import json
 from dotenv import load_dotenv
-from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_sdk import errors
 from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_event_handlers import handle_input, calculate_reactions
 
 load_dotenv()
-app = App(token=os.getenv('SLACK_TOKEN'))
+
+SLACK_TOKEN = os.getenv('SLACK_TOKEN')
+SLACK_XAPP = os.getenv('SLACK_XAPP')
+VALID_REACTIONS = os.getenv('VALID_REACTIONS')
+
+if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
+    raise ValueError("Missing necessary environment variables.")
+
+app = App(token=SLACK_TOKEN)
+
+TIMER_REACTION = "30-sec-timer"
+TIMER_DURATION = 30
+SLEEP_INTERVAL = 5
+timer_active = False
 
 
 def start_slack_bot():
-    handler = SocketModeHandler(app, os.getenv("SLACK_XAPP")).start()
+    handler = SocketModeHandler(app, SLACK_XAPP)
     handler.start()
 
 
-timer = False
-
-
 @app.event("reaction_added")
-def call_reaction_handler(event, say, client):
-    if event["reaction"] not in json.loads(os.getenv("VALID_REACTIONS")):
+def handle_reaction_added(event, say, client):
+    global timer_active
+
+    reaction = event.get("reaction")
+    if reaction not in json.loads(VALID_REACTIONS):
         return
 
-    global timer
-
-    if not timer:
+    if not timer_active:
         try:
-            client.reactions_add(
-                channel=event["item"]["channel"],
-                name="30-sec-timer",
-                timestamp=event["item"]["ts"]
-            )
-        except errors.SlackApiError:
-            pass
+            add_timer_reaction(client, event)
+        except errors.SlackApiError as e:
+            print(f"Slack API error: {e.response['error']}")
+        start_timer(client, say, event)
 
-        timer = True
-        print("Timer started....")
-        for x in range(0, 10, 5):
-            print(f"Slept for {x} seconds")
-            time.sleep(5)
 
-        button = calculate_reactions(client, say, event)
 
-        handle_input(event, say, client, button)
-        timer = False
+def add_timer_reaction(client, event):
+    client.reactions_add(
+        channel=event["item"]["channel"],
+        name=TIMER_REACTION,
+        timestamp=event["item"]["ts"]
+    )
+
+
+def start_timer(client, say, event):
+    global timer_active
+    timer_active = True
+    print("Timer started....")
+    time.sleep(TIMER_DURATION)
+
+    button = calculate_reactions(client, say, event)
+    handle_input(event, say, client, button)
+
+    timer_active = False
