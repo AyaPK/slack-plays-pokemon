@@ -2,7 +2,6 @@ import os
 import time
 import json
 from dotenv import load_dotenv
-from slack_sdk import errors
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_event_handlers import handle_input, calculate_reactions
@@ -41,8 +40,11 @@ def handle_reaction_added(event, say, client):
 
 def start_timer(client, say, event):
     global timer_active
+
     timer_active = True
+    print(f"{TIMER_DURATION} second timer started...")
     time.sleep(TIMER_DURATION)
+    print(f"{TIMER_DURATION} second timer complete!")
 
     button = calculate_reactions(client, say, event)
     handle_input(event, say, client, button)
