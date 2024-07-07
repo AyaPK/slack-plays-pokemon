@@ -18,9 +18,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_REACTION = "30-sec-timer"
 TIMER_DURATION = 30
-SLEEP_INTERVAL = 5
 timer_active = False
 
 
@@ -38,26 +36,12 @@ def handle_reaction_added(event, say, client):
         return
 
     if not timer_active:
-        try:
-            add_timer_reaction(client, event)
-        except errors.SlackApiError as e:
-            print(f"Slack API error: {e.response['error']}")
         start_timer(client, say, event)
-
-
-
-def add_timer_reaction(client, event):
-    client.reactions_add(
-        channel=event["item"]["channel"],
-        name=TIMER_REACTION,
-        timestamp=event["item"]["ts"]
-    )
 
 
 def start_timer(client, say, event):
     global timer_active
     timer_active = True
-    print("Timer started....")
     time.sleep(TIMER_DURATION)
 
     button = calculate_reactions(client, say, event)

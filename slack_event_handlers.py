@@ -65,7 +65,7 @@ def calculate_reactions(client, say, event):
 
 
 def get_priority(key):
-    priority_order = ['b', 'a', 'arrow_down', 'arrow_up', 'arrow_left', 'arrow_right']
+    priority_order = ['b', 'a', 'arrow_down', 'arrow_up', 'arrow_left', 'arrow_right', 'start', 'select']
     try:
         return priority_order.index(key)
     except ValueError:
