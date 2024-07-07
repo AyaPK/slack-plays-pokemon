@@ -34,7 +34,18 @@ $ poetry install
 
 ## Slack App
 SlackPlaysPokémon is a Python Bolt app.
-Create a Slack app with the appropriate read/write permissions, then add the `xoxb` and `xapp` tokens to the appropriate environment variables in the `.env` file.
+Create a Slack app with the appropriate read/write permissions and socket mode enabled, then add the `xoxb` and `xapp` tokens to the appropriate environment variables in the `.env` file.
+
+#### Oauth permissions required:
+- reactions:read
+- reactions:write
+- chat:write
+- files:write
+- app_mentions:read
+
+#### Socket mode event subscriptions required:
+- app_mention
+- reaction_added
 
 ## Emulation
 This project emulates Pokémon Blue (and possibly supports Pokémon Red unofficially). You will need your own legally dumped cartridge as a `.gb` file in the root of the project to run it.
