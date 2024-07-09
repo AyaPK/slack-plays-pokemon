@@ -2,7 +2,7 @@ import json
 import os
 import time
 from integration.pyboy_integration import pyboy_tick
-from state.state_manager import state_manager
+from state.state_manager import state_manager, save_state
 
 
 def handle_input(event, say, client, button):
@@ -13,29 +13,42 @@ def handle_input(event, say, client, button):
 
     button = button.replace("arrow_", "")
     pyboy_tick(button)
-
     local_image_path = "data/image.png"
-    response = client.files_upload_v2(
-        file=local_image_path,
-        title=f"Winning input: {button if button else 'None'}",
-        channel=event["item"]["channel"]
-    )
+    upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
 
-    if response["ok"]:
-        client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
+    if upload_response["ok"]:
+        delete_last_message(client, last_message)
         time.sleep(3)
-        state_manager.set_last_message(say("Vote for the next input:"))
+        new_message = say("Vote for the next input:")
+        state_manager.set_last_message(new_message)
         last_message = state_manager.get_last_message()
 
         if "ts" in last_message:
-            reacts = json.loads(os.getenv("VALID_REACTIONS"))
-            timestamp = last_message["ts"]
-            for emoji in reacts:
-                client.reactions_add(
-                    channel=event["item"]["channel"],
-                    name=emoji,
-                    timestamp=timestamp
-                )
+            add_reactions(client, last_message["ts"], event["item"]["channel"])
+
+        save_state(state_manager)
+
+
+def upload_image(client, local_image_path, button, channel):
+    return client.files_upload_v2(
+        file=local_image_path,
+        title=f"Winning input: {button if button else 'None'}",
+        channel=channel
+    )
+
+
+def delete_last_message(client, last_message):
+    client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
+
+
+def add_reactions(client, timestamp, channel):
+    reacts = json.loads(os.getenv("VALID_REACTIONS"))
+    for emoji in reacts:
+        client.reactions_add(
+            channel=channel,
+            name=emoji,
+            timestamp=timestamp
+        )
 
 
 def calculate_reactions(client, say, event):

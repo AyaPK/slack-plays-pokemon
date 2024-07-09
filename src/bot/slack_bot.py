@@ -17,7 +17,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 30
+TIMER_DURATION = 15
 timer_active = False
 
 

@@ -8,6 +8,7 @@
 *.gb
 *.gb.*
 *.state
+*.pkl
 
 # env
 .env
