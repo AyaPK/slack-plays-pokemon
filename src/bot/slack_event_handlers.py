@@ -30,6 +30,9 @@ def handle_input(event, say, client, button):
 
         save_state(state_manager)
 
+        ensure_canvas_exists(client, last_message["channel"])
+        update_canvas_with_game_info(client, game_info)
+
 
 def upload_image(client, local_image_path, button, channel):
     return client.files_upload_v2(
@@ -54,9 +57,6 @@ def add_reactions(client, timestamp, channel):
             name=emoji,
             timestamp=timestamp
         )
-
-        ensure_canvas_exists(client, last_message["channel"])
-        update_canvas_with_game_info(client, game_info)
 
 
 def calculate_reactions(client, say, event):
