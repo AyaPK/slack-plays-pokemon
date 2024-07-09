@@ -8,7 +8,11 @@
 *.gb
 *.gb.*
 *.state
+
+# Data stuff
 *.pkl
+*.png
+*.csv
 
 # env
 .env
