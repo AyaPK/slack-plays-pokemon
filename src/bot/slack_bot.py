@@ -51,10 +51,10 @@ def start_timer(client, say, event):
     time.sleep(TIMER_DURATION)
     print(f"{TIMER_DURATION} second timer complete!")
 
+    timer_active = False
+
     button = calculate_reactions(client, say, event)
     handle_input(event, say, client, button)
-
-    timer_active = False
 
     post_cycle_actions(button)
 

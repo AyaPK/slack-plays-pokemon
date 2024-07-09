@@ -25,15 +25,15 @@ def handle_input(event, say, client: WebClient, button):
         last_message = say("Vote for the next input:")
         state_manager.last_message = last_message
 
-        if "ts" in last_message:
-            add_reactions(client, last_message["ts"], event["item"]["channel"])
-
         save_state(state_manager)
 
         if new_game_info != state_manager.game_info:
             state_manager.game_info = new_game_info
             ensure_canvas_exists(client, last_message["channel"])
             update_canvas_with_game_info(client, state_manager.game_info)
+
+        if "ts" in last_message:
+            add_reactions(client, last_message["ts"], event["item"]["channel"])
 
 
 def upload_image(client, local_image_path, button, channel):
