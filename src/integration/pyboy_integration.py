@@ -45,7 +45,7 @@ class GameInformation:
     @classmethod
     def from_pyboy(cls, pyboy) -> Self:
         return GameInformation(
-            player_name=pyboy.memory[0x2598:0x2598 + 0xB],
+            player_name=_bytes_as_gen1_string(pyboy.memory[0xD158:0xD158 + 0xB]),
         )
 
     def as_markdown(self) -> str:
@@ -54,3 +54,17 @@ class GameInformation:
 
 Name: {self.player_name}
 """
+
+
+STRING_TERMINATOR = 80
+ASCII_DELTA = 63
+
+
+def _bytes_as_gen1_string(data) -> str:
+    text = ''
+    for byte in data:
+        if byte == STRING_TERMINATOR:
+            break
+        text += chr(byte - ASCII_DELTA)
+
+    return text
