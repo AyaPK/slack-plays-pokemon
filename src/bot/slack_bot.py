@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from bot.slack_event_handlers import handle_input, calculate_reactions
+from state.state_manager import state_manager
 
 load_dotenv()
 
@@ -29,6 +30,9 @@ def start_slack_bot():
 @app.event("reaction_added")
 def handle_reaction_added(event, say, client):
     global timer_active
+
+    if state_manager.get_last_message() and event["item"]["ts"] != state_manager.get_last_message()["ts"]:
+        return
 
     reaction = event.get("reaction")
     if reaction not in json.loads(VALID_REACTIONS):
