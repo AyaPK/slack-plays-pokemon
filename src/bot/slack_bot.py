@@ -19,7 +19,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 15
+TIMER_DURATION = 1
 timer_active = False
 
 
@@ -32,7 +32,7 @@ def start_slack_bot():
 def handle_reaction_added(event, say, client):
     global timer_active
 
-    if state_manager.get_last_message() and event["item"]["ts"] != state_manager.get_last_message()["ts"]:
+    if state_manager.last_message and event["item"]["ts"] != state_manager.last_message["ts"]:
         return
 
     reaction = event.get("reaction")

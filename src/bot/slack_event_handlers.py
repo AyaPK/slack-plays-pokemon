@@ -7,14 +7,14 @@ from integration.pyboy_integration import pyboy_tick
 from state.state_manager import state_manager, save_state
 
 
-def handle_input(event, say, client, button):
+def handle_input(event, say, client: WebClient, button):
     last_message = state_manager.last_message
     if not last_message:
         state_manager.last_message = event["item"]
         last_message = event["item"]
 
     button = button.replace("arrow_", "")
-    game_info = pyboy_tick(button)
+    new_game_info = pyboy_tick(button)
 
     local_image_path = "data/image.png"
     upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
@@ -30,8 +30,10 @@ def handle_input(event, say, client, button):
 
         save_state(state_manager)
 
-        ensure_canvas_exists(client, last_message["channel"])
-        update_canvas_with_game_info(client, game_info)
+        if new_game_info != state_manager.game_info:
+            state_manager.game_info = new_game_info
+            ensure_canvas_exists(client, last_message["channel"])
+            update_canvas_with_game_info(client, state_manager.game_info)
 
 
 def upload_image(client, local_image_path, button, channel):
@@ -108,7 +110,7 @@ def ensure_canvas_exists(client: WebClient, channel_id):
     state_manager.canvas = canvas_id
 
 
-def update_canvas_with_game_info(client, game_info):
+def update_canvas_with_game_info(client: WebClient, game_info):
     client.canvases_edit(
         canvas_id=state_manager.canvas,
         changes=[{
