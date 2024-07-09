@@ -38,7 +38,10 @@ def upload_image(client, local_image_path, button, channel):
 
 
 def delete_last_message(client, last_message):
-    client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
+    try:
+        client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
+    except:
+        print("Error deleting")
 
 
 def add_reactions(client, timestamp, channel):

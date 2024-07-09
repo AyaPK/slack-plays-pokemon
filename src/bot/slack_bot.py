@@ -54,3 +54,20 @@ def start_timer(client, say, event):
     handle_input(event, say, client, button)
 
     timer_active = False
+
+    post_cycle_actions(button)
+
+
+def post_cycle_actions(button):
+    write_inputs_to_file(button)
+
+
+def write_inputs_to_file(button):
+    if os.path.exists("data/inputs.csv"):
+        with open("data/inputs.csv", 'r', newline='') as file:
+            reader = csv.reader(file)
+            row_count = sum(1 for row in reader) - 1
+
+    with open("data/inputs.csv", 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([row_count, button])
