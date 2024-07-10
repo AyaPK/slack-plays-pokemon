@@ -48,6 +48,7 @@ Create a Slack app with the appropriate read/write permissions and socket mode e
 - chat:write
 - files:write
 - app_mentions:read
+- channels:read
 
 #### Socket mode event subscriptions required:
 - app_mention

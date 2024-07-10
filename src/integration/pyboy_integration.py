@@ -1,5 +1,7 @@
 from pyboy import PyBoy
 
+from integration.gen_1_pokemon import GameInformation
+
 
 def save_initial_state():
     with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open("data/state_file.state", "wb") as f:
@@ -28,4 +30,9 @@ def pyboy_tick(button=""):
     pyboy.screen.image.resize((480, 432), 0).save("data/image.png")
     with open("data/state_file.state", "wb") as f:
         pyboy.save_state(f)
+
+    game_info = GameInformation.from_pyboy(pyboy)
+
     pyboy.stop()
+
+    return game_info
