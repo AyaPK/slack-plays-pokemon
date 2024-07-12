@@ -6,7 +6,6 @@ authors = ["AyaPK <aya.pk.contact@gmail.com>"]
 readme = "README.md"
 packages = [{include = "src"}]
 
-
 [tool.poetry.dependencies]
 python = "^3.12"
 pyboy = "^2.2.1"
