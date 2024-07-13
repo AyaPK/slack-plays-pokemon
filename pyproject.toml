@@ -14,6 +14,13 @@ slack-bolt = "^1.19.1"
 pillow = "^10.4.0"
 
 
+[tool.pyright]
+include = ["src"]
+executionEnvironments = [
+  { root = "src" }
+]
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

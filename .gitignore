@@ -16,3 +16,6 @@
 
 # env
 .env
+
+# pycache stuff
+**/__pycache__
