@@ -54,7 +54,10 @@ def start_timer(client, say, event):
     timer_active = False
 
     button = calculate_reactions(client, say, event)
-    handle_input(event, say, client, button)
+    try:
+        handle_input(event, say, client, button)
+    except errors.SlackApiError as e:
+        print(e)
 
     post_cycle_actions(button)
 
