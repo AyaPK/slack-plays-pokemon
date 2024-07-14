@@ -38,6 +38,12 @@ Once you have followed the above instructions, you can run the app using Poetry:
 $ poetry run python src/main.py
 ```
 
+## Running tests
+Tests can be run using `unittest` discovery:
+```bash
+$ python -m unittest
+```
+
 ## Slack App
 SlackPlaysPokémon is a Python Bolt app.
 Create a Slack app with the appropriate read/write permissions and socket mode enabled, then add the `xoxb` and `xapp` tokens to the appropriate environment variables in the `.env` file.
