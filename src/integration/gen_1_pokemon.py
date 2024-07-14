@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from typing import Self, List
-from integration.byte_mappings import GEN_1_ITEMS, GEN_1_MOVES, STATUS_BIT_FIELD, TYPE_MAP
+from integration.byte_mappings import GEN_1_SPECIES, GEN_1_ITEMS, GEN_1_MOVES, STATUS_BIT_FIELD, TYPE_MAP
 
 @dataclass
 class Pokemon:
     nickname: str
     caught_by: str
+    species: str
     hp: int
     max_hp: int
     level: int
@@ -21,6 +22,7 @@ class Pokemon:
         return Pokemon(
             nickname=nickname,
             caught_by=caught_by,
+            species=GEN_1_SPECIES[int(buffer[0x0])],
             hp=int.from_bytes(buffer[0x1:0x1 + 2]),
             max_hp=int.from_bytes(buffer[0x22:0x22 + 2]),
             level=int(buffer[0x21]),
@@ -54,7 +56,7 @@ class Pokemon:
     
     def as_markdown(self) -> str:
         return f"""
-## {self.nickname}
+## {f"{self.nickname} _({self.species})_" if self.nickname else self.species}
 
 Type: {self.type}
 
