@@ -9,14 +9,14 @@ class StateManager:
         self.game_info = None
 
 
-def save_state(manager, filename='data/state_manager.pkl'):
-    with open(filename, 'wb') as file:
+def save_state(manager, filename="data/state_manager.pkl"):
+    with open(filename, "wb") as file:
         pickle.dump(manager, file)
 
 
-def load_state(filename='data/state_manager.pkl'):
+def load_state(filename="data/state_manager.pkl"):
     if os.path.exists(filename):
-        with open(filename, 'rb') as file:
+        with open(filename, "rb") as file:
             return pickle.load(file)
     else:
         manager = StateManager()

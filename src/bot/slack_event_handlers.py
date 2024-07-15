@@ -2,9 +2,11 @@ import json
 import os
 import time
 
+import slack_sdk.errors
 from slack_sdk import WebClient
+
 from integration.pyboy_integration import pyboy_tick
-from state.state_manager import state_manager, save_state
+from state.state_manager import save_state, state_manager
 
 
 def handle_input(event, say, client: WebClient, button):
@@ -17,7 +19,9 @@ def handle_input(event, say, client: WebClient, button):
     new_game_info = pyboy_tick(button)
 
     local_image_path = "data/image.png"
-    upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
+    upload_response = upload_image(
+        client, local_image_path, button, event["item"]["channel"]
+    )
 
     if upload_response["ok"]:
         delete_last_message(client, last_message)
@@ -40,25 +44,21 @@ def upload_image(client, local_image_path, button, channel):
     return client.files_upload_v2(
         file=local_image_path,
         title=f"Winning input: {button if button else 'None'}",
-        channel=channel
+        channel=channel,
     )
 
 
 def delete_last_message(client, last_message):
     try:
         client.chat_delete(channel=last_message["channel"], ts=last_message["ts"])
-    except:
+    except slack_sdk.errors.SlackApiError:
         print("Error deleting")
 
 
 def add_reactions(client, timestamp, channel):
     reacts = json.loads(os.getenv("VALID_REACTIONS"))
     for emoji in reacts:
-        client.reactions_add(
-            channel=channel,
-            name=emoji,
-            timestamp=timestamp
-        )
+        client.reactions_add(channel=channel, name=emoji, timestamp=timestamp)
 
 
 def calculate_reactions(client, say, event):
@@ -67,7 +67,9 @@ def calculate_reactions(client, say, event):
         state_manager.last_message = event["item"]
         last_message = event["item"]
 
-    response = client.reactions_get(channel=last_message["channel"], timestamp=last_message["ts"])
+    response = client.reactions_get(
+        channel=last_message["channel"], timestamp=last_message["ts"]
+    )
 
     reactions = response["message"]["reactions"]
     reaction_counts = {}
@@ -75,11 +77,13 @@ def calculate_reactions(client, say, event):
     for reaction in reactions:
         emoji = reaction["name"]
         count = reaction["count"]
-        if count > 1 and emoji in json.loads(os.getenv('VALID_REACTIONS')):
+        if count > 1 and emoji in json.loads(os.getenv("VALID_REACTIONS")):
             reaction_counts[emoji] = count - 1
 
     try:
-        winning_input = max(reaction_counts, key=lambda k: (reaction_counts[k], -get_priority(k)))
+        winning_input = max(
+            reaction_counts, key=lambda k: (reaction_counts[k], -get_priority(k))
+        )
     except ValueError:
         return ""
 
@@ -87,7 +91,16 @@ def calculate_reactions(client, say, event):
 
 
 def get_priority(key):
-    priority_order = ['b', 'a', 'arrow_down', 'arrow_up', 'arrow_left', 'arrow_right', 'start', 'select']
+    priority_order = [
+        "b",
+        "a",
+        "arrow_down",
+        "arrow_up",
+        "arrow_left",
+        "arrow_right",
+        "start",
+        "select",
+    ]
     try:
         return priority_order.index(key)
     except ValueError:
@@ -102,9 +115,11 @@ def ensure_canvas_exists(client: WebClient, channel_id):
 
     try:
         canvas_id = response["channel"]["properties"]["canvas"]["file_id"]
-    except:
+    except slack_sdk.errors.SlackApiError:
         # Canvas doesn't exist. Create it
-        create_canvas_response = client.conversations_canvases_create(channel_id=channel_id).validate()
+        create_canvas_response = client.conversations_canvases_create(
+            channel_id=channel_id
+        ).validate()
         canvas_id = create_canvas_response["canvas_id"]
 
     state_manager.canvas = canvas_id
@@ -113,11 +128,13 @@ def ensure_canvas_exists(client: WebClient, channel_id):
 def update_canvas_with_game_info(client: WebClient, game_info):
     client.canvases_edit(
         canvas_id=state_manager.canvas,
-        changes=[{
-            "operation": "replace",
-            "document_content": {
-                "type": "markdown",
-                "markdown": game_info.as_markdown()
+        changes=[
+            {
+                "operation": "replace",
+                "document_content": {
+                    "type": "markdown",
+                    "markdown": game_info.as_markdown(),
+                },
             }
-        }]
+        ],
     )

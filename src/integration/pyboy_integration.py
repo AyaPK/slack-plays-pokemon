@@ -4,7 +4,9 @@ from integration.gen_1_pokemon import GameInformation
 
 
 def save_initial_state():
-    with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open("data/state_file.state", "wb") as f:
+    with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open(
+        "data/state_file.state", "wb"
+    ) as f:
         pyboy.save_state(f)
 
 

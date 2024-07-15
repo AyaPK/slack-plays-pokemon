@@ -367,7 +367,7 @@ GEN_1_ITEMS = [
 ]
 
 GEN_1_MOVES = [
-    "", # Index 0 is no move learnt
+    "",  # Index 0 is no move learnt
     "Pound",
     "Karate Chop",
     "Double Slap",
