@@ -12,6 +12,7 @@ pyboy = "^2.2.1"
 python-dotenv = "^1.0.1"
 slack-bolt = "^1.19.1"
 pillow = "^10.4.0"
+imageio = "^2.34.2"
 
 
 [tool.pyright]

@@ -7,6 +7,7 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from bot.slack_event_handlers import handle_input, calculate_reactions
 from state.state_manager import state_manager
+from slack_sdk import errors
 
 load_dotenv()
 
@@ -19,7 +20,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 15
+TIMER_DURATION = 1
 timer_active = False
 
 

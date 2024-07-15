@@ -3,7 +3,7 @@ import os
 import time
 
 from slack_sdk import WebClient
-from integration.pyboy_integration import pyboy_tick
+from integration.pyboy_integration import pyboy_tick, run_anarchy_inputs
 from state.state_manager import state_manager, save_state
 
 
@@ -14,9 +14,12 @@ def handle_input(event, say, client: WebClient, button):
         last_message = event["item"]
 
     button = button.replace("arrow_", "")
-    new_game_info = pyboy_tick(button)
+    # new_game_info = pyboy_tick(button)
+    new_game_info = run_anarchy_inputs(["left",])
 
-    local_image_path = "data/image.png"
+    # local_image_path = "data/image.png"
+    local_image_path = "data/results.gif"
+    
     upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
 
     if upload_response["ok"]:
