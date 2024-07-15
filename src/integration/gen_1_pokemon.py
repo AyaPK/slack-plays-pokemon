@@ -98,7 +98,11 @@ class GameInformation:
             player_name=_bytes_as_gen1_string(pyboy.memory[0xD158 : 0xD158 + 0xB]),
             money=cls._binary_coded_decimal_to_int(pyboy.memory[0xD347 : 0xD347 + 0x3]),
             items=[
-                f"{pyboy.memory[0xD31E + 0x2 * i + 1]} x {GEN_1_ITEMS[pyboy.memory[0xD31E + 0x2 * i]]}"
+                f"{pyboy.memory[
+                    0xD31E + 0x2 * i + 1
+                ]} x {GEN_1_ITEMS[pyboy.memory[
+                    0xD31E + 0x2 * i
+                ]]}"
                 for i in range(num_items_in_inventory)
             ],
             party=[
