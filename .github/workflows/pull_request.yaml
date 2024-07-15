@@ -24,16 +24,19 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Verify Poetry installation
+        run: poetry --version
+
   lint:
     runs-on: ubuntu-latest
     needs: common-setup
     steps:
       - name: Run Linting Script
-        run: poetry run flake8 src/.
+        run: $HOME/.local/bin/poetry run flake8 src/.
 
   test:
     runs-on: ubuntu-latest
     needs: common-setup
     steps:
       - name: Run Tests
-        run: poetry run python -m unittest
+        run: $HOME/.local/bin/poetry run python -m unittest
