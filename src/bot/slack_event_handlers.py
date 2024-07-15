@@ -84,7 +84,7 @@ def calculate_reactions(client, say, event):
         winning_input = max(
             reaction_counts, key=lambda k: (reaction_counts[k], -get_priority(k))
         )
-    except ValueError:
+    except:
         return ""
 
     return winning_input
