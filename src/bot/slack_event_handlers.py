@@ -1,29 +1,34 @@
 import json
 import os
 import time
+from typing import Callable
 
 from slack_sdk import WebClient
 from integration.pyboy_integration import pyboy_tick, run_anarchy_inputs
 from state.state_manager import state_manager, save_state
 
 
-def handle_input(event, say, client: WebClient, button="", anarchy_inputs=[]):
+def handle_input(event, say, client: WebClient, post_delete_actions_callback: Callable[[None],None], isAnarchyMode: bool , button="", anarchy_inputs=[]):
     last_message = state_manager.last_message
     if not last_message:
         state_manager.last_message = event["item"]
         last_message = event["item"]
 
-    button = button.replace("arrow_", "")
-    # new_game_info = pyboy_tick(button)
-    new_game_info = run_anarchy_inputs(anarchy_inputs)
-
-    # local_image_path = "data/image.png"
-    local_image_path = "data/results.gif"
+    if isAnarchyMode:
+        new_game_info = run_anarchy_inputs(anarchy_inputs)
+        local_image_path = "data/results.gif"
+        inputs_to_save = anarchy_inputs
+    else: 
+        button = button.replace("arrow_", "")
+        new_game_info = pyboy_tick(button)
+        local_image_path = "data/image.png"
+        inputs_to_save = [button]
     
     upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
 
     if upload_response["ok"]:
         delete_last_message(client, last_message)
+        post_delete_actions_callback(inputs_to_save)
         time.sleep(3)
         last_message = say("Vote for the next input:")
         state_manager.last_message = last_message
