@@ -7,7 +7,7 @@ from integration.pyboy_integration import pyboy_tick, run_anarchy_inputs
 from state.state_manager import state_manager, save_state
 
 
-def handle_input(event, say, client: WebClient, button):
+def handle_input(event, say, client: WebClient, button="", anarchy_inputs=[]):
     last_message = state_manager.last_message
     if not last_message:
         state_manager.last_message = event["item"]
@@ -15,7 +15,7 @@ def handle_input(event, say, client: WebClient, button):
 
     button = button.replace("arrow_", "")
     # new_game_info = pyboy_tick(button)
-    new_game_info = run_anarchy_inputs(["left",])
+    new_game_info = run_anarchy_inputs(anarchy_inputs)
 
     # local_image_path = "data/image.png"
     local_image_path = "data/results.gif"
