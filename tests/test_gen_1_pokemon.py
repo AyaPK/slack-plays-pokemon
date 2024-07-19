@@ -12,7 +12,7 @@ class TestPokemonDisplay(unittest.TestCase):
                 0x5C,  # 0x00 	Index number of the Species 	1 byte
                 0x00,
                 0x01,  # 0x01 	Current HP 	2 bytes
-                0x10,  # 0x03 	Level 	1 byte
+                0x40,  # 0x03 	Level 	1 byte
                 0x02,  # 0x04 	Status condition 	1 byte
                 0x01,  # 0x06 	Type 2 	1 byte
                 0x02,  # 0x06 	Type 2 	1 byte
@@ -23,9 +23,9 @@ class TestPokemonDisplay(unittest.TestCase):
                 0x0B,  # 0x0B 	Index number of move 4 	1 byte
                 0x0C,
                 0x0D,  # 0x0C 	Original Trainer ID number 	2 bytes
-                0x0E,
-                0x0F,
-                0x10,  # 0x0E 	Experience points 	3 bytes
+                0x04,
+                0x00,
+                0x01,  # 0x0E 	Experience points 	3 bytes
                 0x11,
                 0x12,  # 0x11 	HP EV data 	2 bytes
                 0x13,
@@ -42,7 +42,7 @@ class TestPokemonDisplay(unittest.TestCase):
                 0x1E,  # 0x1E 	Move 2's PP values 	1 byte
                 0x1F,  # 0x1F 	Move 3's PP values 	1 byte
                 0x20,  # 0x20 	Move 4's PP values 	1 byte
-                0x21,  # 0x21 	Level 	1 byte
+                0x40,  # 0x21 	Level 	1 byte
                 0x01,
                 0x02,  # 0x22 	Maximum HP 	2 bytes
                 0x24,
@@ -62,13 +62,16 @@ class TestPokemonDisplay(unittest.TestCase):
         self.assertEqual("Horsea", self.pokemon.species)
         self.assertEqual(1, self.pokemon.hp)
         self.assertEqual(256 + 2, self.pokemon.max_hp)
-        self.assertEqual(33, self.pokemon.level)
+        self.assertEqual(64, self.pokemon.level)
         self.assertEqual("Healthy", self.pokemon.status)
         self.assertEqual("Fighting - Flying", self.pokemon.type)
         self.assertEqual("Ice Punch", self.pokemon.move1)
         self.assertEqual("Thunder Punch", self.pokemon.move2)
         self.assertEqual("Scratch", self.pokemon.move3)
         self.assertEqual("Vise Grip", self.pokemon.move4)
+        self.assertEqual(262145, self.pokemon.xp)
+        self.assertEqual("Medium Fast", self.pokemon.experience_type)
+        self.assertEqual(12480, self.pokemon.xp_to_next_level())
 
     def test_output(self):
         self.assertEqual(
@@ -82,7 +85,7 @@ HP: 1 / 258
 
 Status: Healthy
 
-Level: 33
+Level: 64 (12480 XP to next level)
 
 Moves:
  - Ice Punch

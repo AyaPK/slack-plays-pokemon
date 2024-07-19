@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List, Self
 
 from integration.byte_mappings import (
+    EXPERIENCE_TYPES,
     GEN_1_ITEMS,
     GEN_1_MOVES,
     GEN_1_SPECIES,
@@ -24,6 +25,8 @@ class Pokemon:
     move2: str
     move3: str
     move4: str
+    xp: int
+    experience_type: str
 
     @classmethod
     def from_memory_buffer(cls, nickname: str, caught_by: str, buffer) -> Self:
@@ -40,6 +43,8 @@ class Pokemon:
             move2=GEN_1_MOVES[buffer[0x9]],
             move3=GEN_1_MOVES[buffer[0xA]],
             move4=GEN_1_MOVES[buffer[0xB]],
+            xp=int.from_bytes(buffer[0x0e: 0x0e + 3]),
+            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]]
         )
 
     @staticmethod
@@ -60,6 +65,10 @@ class Pokemon:
 
         return status or "Healthy"
 
+    def xp_to_next_level(self) -> int:
+        total_required = _xp_required_for_level(self.experience_type, self.level + 1)
+        return total_required - self.xp
+
     def as_markdown(self) -> str:
         return f"""
 ## {f"{self.nickname} _({self.species})_" if self.nickname else self.species}
@@ -70,7 +79,7 @@ HP: {self.hp} / {self.max_hp}
 
 Status: {self.status}
 
-Level: {self.level}
+Level: {self.level} ({self.xp_to_next_level()} XP to next level)
 
 Moves:
 {f" - {self.move1}" if self.move1 else ""}
@@ -170,3 +179,16 @@ def _bytes_as_gen1_string(data) -> str:
         text = "UNKNOWN"
 
     return text
+
+
+# https://bulbapedia.bulbagarden.net/wiki/Experience
+def _xp_required_for_level(experience_type: str, level: int) -> int:
+    match experience_type:
+        case "Fast":
+            return int(0.8 * level ** 3)
+        case "Medium Fast":
+            return int(level ** 3)
+        case "Medium Slow":
+            return int(1.2 * level ** 3 - 15 * level ** 2 + 100 * level - 140)
+        case "Slow":
+            return int(1.25 * level ** 3)
