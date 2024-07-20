@@ -44,6 +44,13 @@ Tests can be run using `unittest` discovery:
 $ python -m unittest
 ```
 
+## Linting
+This project uses `black`, `isort`, and `flake8` to lint the project and conform to PEP-8 conventions.
+Tests can be run using the created Poetry script.
+```bash
+$ poetry run lint
+```
+
 ## Slack App
 SlackPlaysPokémon is a Python Bolt app.
 Create a Slack app with the appropriate read/write permissions and socket mode enabled, then add the `xoxb` and `xapp` tokens to the appropriate environment variables in the `.env` file.

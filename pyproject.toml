@@ -8,11 +8,18 @@ packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pyboy = "^2.2.1"
+pyboy = "^2.2.2"
 python-dotenv = "^1.0.1"
 slack-bolt = "^1.19.1"
 pillow = "^10.4.0"
 
+[tool.poetry.scripts]
+lint = "scripts.lint:main"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.0"
+black = "^24.4.2"
+isort = "^5.13.2"
 
 [tool.pyright]
 include = ["src"]
@@ -20,7 +27,14 @@ executionEnvironments = [
   { root = "src" }
 ]
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310']
+
+[tool.isort]
+profile = "black"
+line_length = 88
