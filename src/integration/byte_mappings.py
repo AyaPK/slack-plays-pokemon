@@ -370,7 +370,7 @@ GEN_1_TMS = [
 ]
 
 # Create the offset between TM's and Non-TM's
-GEN_1_ITEMS = GEN_1_NORMAL_ITEMS + [None]*112 + GEN_1_TMS
+GEN_1_ITEMS = GEN_1_NORMAL_ITEMS + [None] * 112 + GEN_1_TMS
 
 GEN_1_MOVES = [
     "",  # Index 0 is no move learnt
