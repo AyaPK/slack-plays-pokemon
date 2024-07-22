@@ -219,7 +219,7 @@ GEN_1_SPECIES = [
     "Victreebel",
 ]
 
-GEN_1_ITEMS = [
+GEN_1_NORMAL_ITEMS = [
     "",
     "Master Ball",
     "Ultra Ball",
@@ -304,6 +304,9 @@ GEN_1_ITEMS = [
     "Max Ether",
     "Elixer",
     "Max Elixer",
+]
+
+GEN_1_TMS = [
     "HM01",
     "HM02",
     "HM03",
@@ -365,6 +368,9 @@ GEN_1_ITEMS = [
     "TM54",
     "TM55",
 ]
+
+# Create the offset between TM's and Non-TM's
+GEN_1_ITEMS = GEN_1_NORMAL_ITEMS + [None] * 112 + GEN_1_TMS
 
 GEN_1_MOVES = [
     "",  # Index 0 is no move learnt
