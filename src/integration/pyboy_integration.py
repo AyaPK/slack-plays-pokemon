@@ -9,7 +9,9 @@ def is_battle_happening(pyboy: PyBoy):
     return pyboy.memory[0xD057] != 0
 
 def save_initial_state():
-    with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open("data/state_file.state", "wb") as f:
+    with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open(
+        "data/state_file.state", "wb"
+    ) as f:
         pyboy.save_state(f)
 
 

@@ -1,20 +1,23 @@
 import csv
+import json
 import os
 import time
-import json
+
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from bot.slack_event_handlers import handle_input, calculate_reactions
+from slack_sdk import errors
+
+from bot.slack_event_handlers import calculate_reactions, handle_input
 from state.state_manager import state_manager
 from slack_sdk import errors
 from datetime import datetime
 
 load_dotenv()
 
-SLACK_TOKEN = os.getenv('SLACK_TOKEN')
-SLACK_XAPP = os.getenv('SLACK_XAPP')
-VALID_REACTIONS = os.getenv('VALID_REACTIONS')
+SLACK_TOKEN = os.getenv("SLACK_TOKEN")
+SLACK_XAPP = os.getenv("SLACK_XAPP")
+VALID_REACTIONS = os.getenv("VALID_REACTIONS")
 
 if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
     raise ValueError("Missing necessary environment variables.")
@@ -36,7 +39,10 @@ def handle_reaction_added(event, say, client):
     global timer_active
     global reactions_dict
 
-    if state_manager.last_message and event["item"]["ts"] != state_manager.last_message["ts"]:
+    if (
+        state_manager.last_message
+        and event["item"]["ts"] != state_manager.last_message["ts"]
+    ):
         return
 
     reaction = event.get("reaction")
@@ -99,11 +105,11 @@ def post_cycle_actions(inputs_to_save: list[str], anarchy_mode_active: bool):
 
 def write_inputs_to_file(inputs_to_save: list[str], anarchy_mode_active: bool):
     if os.path.exists("data/inputs.csv"):
-        with open("data/inputs.csv", 'r', newline='') as file:
+        with open("data/inputs.csv", "r", newline="") as file:
             reader = csv.reader(file)
             row_count = sum(1 for row in reader) - 1
 
-    with open("data/inputs.csv", 'a', newline='') as file:
+    with open("data/inputs.csv", "a", newline="") as file:
         writer = csv.writer(file)
         for index,button in enumerate(inputs_to_save):
             writer.writerow([row_count + index, button, 200 if anarchy_mode_active else 500])
