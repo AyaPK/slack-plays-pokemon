@@ -58,11 +58,10 @@ def run_anarchy_inputs(inputs: list[str]):
         save_initial_state()
 
     for i, button in enumerate(inputs):
-        parsed_button = button.lower().replace("arrow_", "")
-        if parsed_button in valid_buttons:
-            pyboy.button_press(parsed_button)
+        if button in valid_buttons:
+            pyboy.button_press(button)
             pyboy.tick(2)
-            pyboy.button_release(parsed_button)
+            pyboy.button_release(button)
             pyboy.tick(2)
         pyboy.tick(200)
         pyboy.screen.image.resize((480, 432), 0).save(f"data/gif/image-{str(i).zfill(3)}.png")

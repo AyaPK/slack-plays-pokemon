@@ -15,7 +15,8 @@ def handle_input(event, say, client: WebClient, post_delete_actions_callback: Ca
         last_message = event["item"]
 
     if isAnarchyMode:
-        new_game_info = run_anarchy_inputs(anarchy_inputs)
+        parsed_anarchy_inputs = [btn.lower().replace("arrow_", "") for btn in anarchy_inputs]
+        new_game_info = run_anarchy_inputs(parsed_anarchy_inputs)
         local_image_path = "data/results.gif"
         inputs_to_save = anarchy_inputs
     else: 
@@ -24,11 +25,13 @@ def handle_input(event, say, client: WebClient, post_delete_actions_callback: Ca
         local_image_path = "data/image.png"
         inputs_to_save = [button]
     
-    upload_response = upload_image(client, local_image_path, button, event["item"]["channel"])
+    upload_response = upload_image(client, local_image_path, event["item"]["channel"], isAnarchyMode, button, parsed_anarchy_inputs)
 
     if upload_response["ok"]:
         delete_last_message(client, last_message)
+
         post_delete_actions_callback(inputs_to_save)
+
         time.sleep(3)
         last_message = say("Vote for the next input:")
         state_manager.last_message = last_message
@@ -44,11 +47,13 @@ def handle_input(event, say, client: WebClient, post_delete_actions_callback: Ca
             add_reactions(client, last_message["ts"], event["item"]["channel"])
 
 
-def upload_image(client, local_image_path, button, channel):
+def upload_image(client, local_image_path, channel, isAnarchyMode: bool, button="", anarchy_inputs=[]):
+    message = f"Inputs provided: {anarchy_inputs}" if isAnarchyMode else f"Winning input: {button if button else 'None'}"
+        
     return client.files_upload_v2(
-        file=local_image_path,
-        title=f"Winning input: {button if button else 'None'}",
-        channel=channel
+    file=local_image_path,
+    title=message,
+    channel=channel
     )
 
 
