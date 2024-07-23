@@ -1,6 +1,6 @@
 import csv
 
-with open("data/inputs.csv", 'r') as input_file:
+with open("data/inputs.csv", "r") as input_file:
     with open("data/inputs_new.csv", "w") as output_file:
         r = csv.reader(input_file)
         w = csv.writer(output_file)

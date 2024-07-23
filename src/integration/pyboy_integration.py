@@ -1,12 +1,14 @@
+import os
+
+import imageio
 from pyboy import PyBoy
 
 from integration.gen_1_pokemon import GameInformation
-import imageio
-import os
 
 
 def is_battle_happening(pyboy: PyBoy):
     return pyboy.memory[0xD057] != 0
+
 
 def save_initial_state():
     with PyBoy("data/blue.gb", window="null", cgb=True) as pyboy, open(
@@ -47,12 +49,13 @@ def pyboy_tick(button=""):
 
     return game_info
 
+
 def run_anarchy_inputs(inputs: list[str]):
     valid_buttons = ["a", "b", "up", "down", "left", "right", "start", "select"]
-    
+
     pyboy = PyBoy("data/blue.gb", window="null", cgb=True)
     pyboy.set_emulation_speed(100)
-    
+
     try:
         with open("data/state_file.state", "rb") as f:
             pyboy.load_state(f)
@@ -66,15 +69,21 @@ def run_anarchy_inputs(inputs: list[str]):
             pyboy.button_release(button)
             pyboy.tick(2)
         pyboy.tick(200)
-        pyboy.screen.image.resize((480, 432), 0).save(f"data/gif/image-{str(i).zfill(3)}.png")
-    
-    gif_image_filenames = [os.path.join(dirpath,f) for (dirpath, dirnames, filenames) in os.walk("data/gif") for f in filenames]
+        pyboy.screen.image.resize((480, 432), 0).save(
+            f"data/gif/image-{str(i).zfill(3)}.png"
+        )
+
+    gif_image_filenames = [
+        os.path.join(dirpath, f)
+        for (dirpath, dirnames, filenames) in os.walk("data/gif")
+        for f in filenames
+    ]
     print(gif_image_filenames)
-    images =[]
+    images = []
     for filename in gif_image_filenames:
         images.append(imageio.imread(filename))
         os.remove(filename)
-    
+
     imageio.mimsave("data/results.gif", images, fps=2)
 
     with open("data/state_file.state", "wb") as f:
