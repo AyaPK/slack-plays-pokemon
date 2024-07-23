@@ -19,20 +19,20 @@ def handle_input(event, say, client: WebClient, post_delete_actions_callback: Ca
         new_game_info = run_anarchy_inputs(parsed_anarchy_inputs)
         local_image_path = "data/results.gif"
         inputs_to_save = anarchy_inputs
+        upload_response = upload_image(client, local_image_path, event["item"]["channel"], isAnarchyMode, anarchy_inputs=parsed_anarchy_inputs)
     else: 
         button = button.replace("arrow_", "")
         new_game_info = pyboy_tick(button)
         local_image_path = "data/image.png"
         inputs_to_save = [button]
-    
-    upload_response = upload_image(client, local_image_path, event["item"]["channel"], isAnarchyMode, button, parsed_anarchy_inputs)
+        upload_response = upload_image(client, local_image_path, event["item"]["channel"], isAnarchyMode, button)
 
     if upload_response["ok"]:
         delete_last_message(client, last_message)
 
-        post_delete_actions_callback(inputs_to_save)
-
         time.sleep(3)
+        post_delete_actions_callback(inputs_to_save)
+        
         last_message = say("Vote for the next input:")
         state_manager.last_message = last_message
 

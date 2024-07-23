@@ -8,6 +8,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 from bot.slack_event_handlers import handle_input, calculate_reactions
 from state.state_manager import state_manager
 from slack_sdk import errors
+from datetime import datetime
 
 load_dotenv()
 
@@ -20,7 +21,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 5
+TIMER_DURATION = 15
 timer_active = False
 reactions_dict = {}
 inputs_to_save = []
@@ -47,28 +48,28 @@ def handle_reaction_added(event, say, client):
         reactions_dict[f"{user}-{len(reactions_dict)}"] = (event.get("event_ts"), reaction)
 
     if not timer_active:
-        start_timer(client, say, event)
+        start_timer(client, say, event, isAnarchyMode())
 
 
-def start_timer(client, say, event):
+def start_timer(client, say, event, anarchy_mode_active):
     global reactions_dict
     global timer_active
     global inputs_to_save
 
     timer_active = True
     
+    
     print(f"{TIMER_DURATION} second timer started...")
     time.sleep(TIMER_DURATION)
     print(f"{TIMER_DURATION} second timer complete!")
 
-
-    if isAnarchyMode():
+    if anarchy_mode_active:
         try:
+            print("Anarchy mode is active")
             handle_input(event,say,client,post_delete_actions_callback,True,anarchy_inputs=convert_reactions_dict_to_input_list(reactions_dict))
         except errors.SlackApiError as e:
             print(e)
         
-
     else:
         button = calculate_reactions(client, say, event)
         try:
@@ -76,7 +77,7 @@ def start_timer(client, say, event):
         except errors.SlackApiError as e:
             print(e)
 
-    post_cycle_actions(inputs_to_save)
+    post_cycle_actions(inputs_to_save, anarchy_mode_active)
 
 def post_delete_actions_callback(reactions_to_save: list[str]):
     global timer_active
@@ -92,11 +93,11 @@ def convert_reactions_dict_to_input_list(reactions: dict):
 
     return [t[1] for t in sorted_values]
 
-def post_cycle_actions(inputs_to_save: list[str]):
-    write_inputs_to_file(inputs_to_save)
+def post_cycle_actions(inputs_to_save: list[str], anarchy_mode_active: bool):
+    write_inputs_to_file(inputs_to_save, anarchy_mode_active)
 
 
-def write_inputs_to_file(inputs_to_save: list[str]):
+def write_inputs_to_file(inputs_to_save: list[str], anarchy_mode_active: bool):
     if os.path.exists("data/inputs.csv"):
         with open("data/inputs.csv", 'r', newline='') as file:
             reader = csv.reader(file)
@@ -105,7 +106,9 @@ def write_inputs_to_file(inputs_to_save: list[str]):
     with open("data/inputs.csv", 'a', newline='') as file:
         writer = csv.writer(file)
         for index,button in enumerate(inputs_to_save):
-            writer.writerow([row_count + index, button, 200 if isAnarchyMode() else 500])
+            writer.writerow([row_count + index, button, 200 if anarchy_mode_active else 500])
 
 def isAnarchyMode():
-    return True
+    utc_dt = datetime.now()
+    local_dt = utc_dt.astimezone()
+    return local_dt.weekday() == 4 and local_dt.hour >= 13 and local_dt.hour <= 18 # anarchy mode is Friday between 1pm and 6pm 
