@@ -43,8 +43,8 @@ class Pokemon:
             move2=GEN_1_MOVES[buffer[0x9]],
             move3=GEN_1_MOVES[buffer[0xA]],
             move4=GEN_1_MOVES[buffer[0xB]],
-            xp=int.from_bytes(buffer[0x0e: 0x0e + 3]),
-            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]]
+            xp=int.from_bytes(buffer[0x0E : 0x0E + 3]),
+            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]],
         )
 
     @staticmethod
@@ -185,10 +185,10 @@ def _bytes_as_gen1_string(data) -> str:
 def _xp_required_for_level(experience_type: str, level: int) -> int:
     match experience_type:
         case "Fast":
-            return int(0.8 * level ** 3)
+            return int(0.8 * level**3)
         case "Medium Fast":
-            return int(level ** 3)
+            return int(level**3)
         case "Medium Slow":
-            return int(1.2 * level ** 3 - 15 * level ** 2 + 100 * level - 140)
+            return int(1.2 * level**3 - 15 * level**2 + 100 * level - 140)
         case "Slow":
-            return int(1.25 * level ** 3)
+            return int(1.25 * level**3)
