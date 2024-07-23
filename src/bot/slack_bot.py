@@ -51,7 +51,7 @@ def handle_reaction_added(event, say, client):
 
     user = event.get("user")
     if user not in reactions_dict.keys():
-        reactions_dict[f"{user}-{len(reactions_dict)}"] = (
+        reactions_dict[user] = (
             event.get("event_ts"),
             reaction,
         )
