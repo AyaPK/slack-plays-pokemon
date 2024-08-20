@@ -19,6 +19,10 @@ class Pokemon:
     hp: int
     max_hp: int
     level: int
+    attack: int
+    defense: int
+    speed: int
+    special: int
     status: str
     type: str
     move1: str
@@ -34,9 +38,13 @@ class Pokemon:
             nickname=nickname,
             caught_by=caught_by,
             species=GEN_1_SPECIES[int(buffer[0x0])],
-            hp=int.from_bytes(buffer[0x1 : 0x1 + 2]),
-            max_hp=int.from_bytes(buffer[0x22 : 0x22 + 2]),
+            hp=int.from_bytes(buffer[0x1: 0x1 + 2]),
+            max_hp=int.from_bytes(buffer[0x22: 0x22 + 2]),
             level=int(buffer[0x21]),
+            attack=int.from_bytes(buffer[0x24: 0x24 + 2]),
+            defense=int.from_bytes(buffer[0x26: 0x26 + 2]),
+            speed=int.from_bytes(buffer[0x28: 0x28 + 2]),
+            special=int.from_bytes(buffer[0x2A: 0x2A + 2]),
             status=cls._status_from_bit_field(buffer[0x4]),
             type=cls._type_from_bytes(buffer[0x5], buffer[0x6]),
             move1=GEN_1_MOVES[buffer[0x8]],
@@ -80,6 +88,8 @@ HP: {self.hp} / {self.max_hp}
 Status: {self.status}
 
 Level: {self.level} ({self.xp_to_next_level()} XP to next level)
+
+akt/def/spd/spec: {self.attack}/{self.defense}/{self.speed}/{self.special}
 
 Moves:
 {f" - {self.move1}" if self.move1 else ""}
