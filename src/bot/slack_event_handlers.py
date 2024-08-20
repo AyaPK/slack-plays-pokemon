@@ -126,15 +126,19 @@ def ensure_canvas_exists(client: WebClient, channel_id):
 
 
 def update_canvas_with_game_info(client: WebClient, game_info):
-    client.canvases_edit(
-        canvas_id=state_manager.canvas,
-        changes=[
-            {
-                "operation": "replace",
-                "document_content": {
-                    "type": "markdown",
-                    "markdown": game_info.as_markdown(),
-                },
-            }
-        ],
-    )
+    try:
+        client.canvases_edit(
+            canvas_id=state_manager.canvas,
+            changes=[
+                {
+                    "operation": "replace",
+                    "document_content": {
+                        "type": "markdown",
+                        "markdown": game_info.as_markdown(),
+                    },
+                }
+            ],
+        )
+    except slack_sdk.errors.SlackApiError as e:
+        print(e)
+        return False
