@@ -19,25 +19,27 @@ def handle_input(event, say, client: WebClient, button):
     new_game_info = pyboy_tick(button)
 
     local_image_path = "data/image.png"
-    upload_response = upload_image(
-        client, local_image_path, button, event["item"]["channel"]
-    )
+    try:
+        upload_response = upload_image(
+            client, local_image_path, button, event["item"]["channel"]
+        )
+    except slack_sdk.errors.SlackApiError as e:
+        print(e)
 
-    if upload_response["ok"]:
-        delete_last_message(client, last_message)
-        time.sleep(3)
-        last_message = say("Vote for the next input:")
-        state_manager.last_message = last_message
+    delete_last_message(client, last_message)
+    time.sleep(3)
+    last_message = say("Vote for the next input:")
+    state_manager.last_message = last_message
 
-        save_state(state_manager)
+    save_state(state_manager)
 
-        if new_game_info != state_manager.game_info:
-            state_manager.game_info = new_game_info
-            ensure_canvas_exists(client, last_message["channel"])
-            update_canvas_with_game_info(client, state_manager.game_info)
+    if new_game_info != state_manager.game_info:
+        state_manager.game_info = new_game_info
+        ensure_canvas_exists(client, last_message["channel"])
+        update_canvas_with_game_info(client, state_manager.game_info)
 
-        if "ts" in last_message:
-            add_reactions(client, last_message["ts"], event["item"]["channel"])
+    if "ts" in last_message:
+        add_reactions(client, last_message["ts"], event["item"]["channel"])
 
 
 def upload_image(client, local_image_path, button, channel):
@@ -140,5 +142,7 @@ def update_canvas_with_game_info(client: WebClient, game_info):
             ],
         )
     except slack_sdk.errors.SlackApiError as e:
-        print(e)
+        print(f"Slack API Error: {e.response['error']}")
+        if 'non-JSON' in e.response['error']:
+            print(e.response)
         return False
