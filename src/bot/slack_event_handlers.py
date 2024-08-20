@@ -20,7 +20,7 @@ def handle_input(event, say, client: WebClient, button):
 
     local_image_path = "data/image.png"
     try:
-        upload_response = upload_image(
+        upload_image(
             client, local_image_path, button, event["item"]["channel"]
         )
     except slack_sdk.errors.SlackApiError as e:
