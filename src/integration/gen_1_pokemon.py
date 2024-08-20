@@ -8,6 +8,7 @@ from integration.byte_mappings import (
     GEN_1_SPECIES,
     STATUS_BIT_FIELD,
     TYPE_MAP,
+    MOVE_BASE_PP,
 )
 
 
@@ -26,9 +27,17 @@ class Pokemon:
     status: str
     type: str
     move1: str
+    move1_pp: int
+    move1_max_pp: int
     move2: str
+    move2_pp: int
+    move2_max_pp: int
     move3: str
+    move3_pp: int
+    move3_max_pp: int
     move4: str
+    move4_pp: int
+    move4_max_pp: int
     xp: int
     experience_type: str
 
@@ -48,9 +57,17 @@ class Pokemon:
             status=cls._status_from_bit_field(buffer[0x4]),
             type=cls._type_from_bytes(buffer[0x5], buffer[0x6]),
             move1=GEN_1_MOVES[buffer[0x8]],
+            move1_pp=(int(buffer[0x1D]) & 0x3F) + ((int(buffer[0x1D]) >> 6) & 0x03),
+            move1_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0x8]]],
             move2=GEN_1_MOVES[buffer[0x9]],
+            move2_pp=(int(buffer[0x1E]) & 0x3F) + ((int(buffer[0x1E]) >> 6) & 0x03),
+            move2_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0x9]]],
             move3=GEN_1_MOVES[buffer[0xA]],
+            move3_pp=(int(buffer[0x1F]) & 0x3F) + ((int(buffer[0x1F]) >> 6) & 0x03),
+            move3_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0xA]]],
             move4=GEN_1_MOVES[buffer[0xB]],
+            move4_pp=(int(buffer[0x20]) & 0x3F) + ((int(buffer[0x20]) >> 6) & 0x03),
+            move4_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0xB]]],
             xp=int.from_bytes(buffer[0x0e: 0x0e + 3]),
             experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]]
         )
@@ -92,10 +109,10 @@ Level: {self.level} ({self.xp_to_next_level()} XP to next level)
 akt/def/spd/spec: {self.attack}/{self.defense}/{self.speed}/{self.special}
 
 Moves:
-{f" - {self.move1}" if self.move1 else ""}
-{f" - {self.move2}" if self.move2 else ""}
-{f" - {self.move3}" if self.move3 else ""}
-{f" - {self.move4}" if self.move4 else ""}
+{f" - {self.move1} ({self.move1_pp}/{self.move1_max_pp})" if self.move1 else ""}
+{f" - {self.move2} ({self.move2_pp}/{self.move2_max_pp})" if self.move2 else ""}
+{f" - {self.move3} ({self.move3_pp}/{self.move3_max_pp})" if self.move3 else ""}
+{f" - {self.move4} ({self.move4_pp}/{self.move4_max_pp})" if self.move4 else ""}
 
 Caught by: {self.caught_by}
 """
