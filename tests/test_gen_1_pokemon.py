@@ -1,7 +1,7 @@
 import unittest
 
+from src.integration.byte_mappings import EXPERIENCE_TYPES, GEN_1_SPECIES
 from src.integration.gen_1_pokemon import Pokemon
-from src.integration.byte_mappings import GEN_1_SPECIES, EXPERIENCE_TYPES
 
 
 class TestPokemonDisplay(unittest.TestCase):
@@ -110,7 +110,7 @@ Caught by: Green
 
     def test_nidoran(self):
         self.pokemon.species = GEN_1_SPECIES[0x03]
-        self.pokemon.experience_type =  EXPERIENCE_TYPES[GEN_1_SPECIES[0x03]]
+        self.pokemon.experience_type = EXPERIENCE_TYPES[GEN_1_SPECIES[0x03]]
         self.assertEqual("Nidoran♂", self.pokemon.species)
         self.assertEqual(10390, self.pokemon.xp_to_next_level())
 

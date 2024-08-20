@@ -6,9 +6,9 @@ from integration.byte_mappings import (
     GEN_1_ITEMS,
     GEN_1_MOVES,
     GEN_1_SPECIES,
+    MOVE_BASE_PP,
     STATUS_BIT_FIELD,
     TYPE_MAP,
-    MOVE_BASE_PP,
 )
 
 
@@ -47,13 +47,13 @@ class Pokemon:
             nickname=nickname,
             caught_by=caught_by,
             species=GEN_1_SPECIES[int(buffer[0x0])],
-            hp=int.from_bytes(buffer[0x1: 0x1 + 2]),
-            max_hp=int.from_bytes(buffer[0x22: 0x22 + 2]),
+            hp=int.from_bytes(buffer[0x1 : 0x1 + 2]),
+            max_hp=int.from_bytes(buffer[0x22 : 0x22 + 2]),
             level=int(buffer[0x21]),
-            attack=int.from_bytes(buffer[0x24: 0x24 + 2]),
-            defense=int.from_bytes(buffer[0x26: 0x26 + 2]),
-            speed=int.from_bytes(buffer[0x28: 0x28 + 2]),
-            special=int.from_bytes(buffer[0x2A: 0x2A + 2]),
+            attack=int.from_bytes(buffer[0x24 : 0x24 + 2]),
+            defense=int.from_bytes(buffer[0x26 : 0x26 + 2]),
+            speed=int.from_bytes(buffer[0x28 : 0x28 + 2]),
+            special=int.from_bytes(buffer[0x2A : 0x2A + 2]),
             status=cls._status_from_bit_field(buffer[0x4]),
             type=cls._type_from_bytes(buffer[0x5], buffer[0x6]),
             move1=GEN_1_MOVES[buffer[0x8]],
@@ -68,8 +68,8 @@ class Pokemon:
             move4=GEN_1_MOVES[buffer[0xB]],
             move4_pp=(int(buffer[0x20]) & 0x3F) + ((int(buffer[0x20]) >> 6) & 0x03),
             move4_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0xB]]],
-            xp=int.from_bytes(buffer[0x0e: 0x0e + 3]),
-            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]]
+            xp=int.from_bytes(buffer[0x0E : 0x0E + 3]),
+            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]],
         )
 
     @staticmethod
@@ -212,10 +212,10 @@ def _bytes_as_gen1_string(data) -> str:
 def _xp_required_for_level(experience_type: str, level: int) -> int:
     match experience_type:
         case "Fast":
-            return int(0.8 * level ** 3)
+            return int(0.8 * level**3)
         case "Medium Fast":
-            return int(level ** 3)
+            return int(level**3)
         case "Medium Slow":
-            return int(1.2 * level ** 3 - 15 * level ** 2 + 100 * level - 140)
+            return int(1.2 * level**3 - 15 * level**2 + 100 * level - 140)
         case "Slow":
-            return int(1.25 * level ** 3)
+            return int(1.25 * level**3)

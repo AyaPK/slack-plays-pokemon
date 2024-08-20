@@ -20,9 +20,7 @@ def handle_input(event, say, client: WebClient, button):
 
     local_image_path = "data/image.png"
     try:
-        upload_image(
-            client, local_image_path, button, event["item"]["channel"]
-        )
+        upload_image(client, local_image_path, button, event["item"]["channel"])
     except slack_sdk.errors.SlackApiError as e:
         print(e)
 
@@ -143,6 +141,6 @@ def update_canvas_with_game_info(client: WebClient, game_info):
         )
     except slack_sdk.errors.SlackApiError as e:
         print(f"Slack API Error: {e.response['error']}")
-        if 'non-JSON' in e.response['error']:
+        if "non-JSON" in e.response["error"]:
             print(e.response)
         return False
