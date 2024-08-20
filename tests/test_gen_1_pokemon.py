@@ -39,10 +39,10 @@ class TestPokemonDisplay(unittest.TestCase):
                 0x1A,  # 0x19 	Special EV data 	2 bytes
                 0x1B,
                 0x1C,  # 0x1B 	IV data 	2 bytes
-                0x08,  # 0x1D 	Move 1's PP values 	1 byte
-                0x09,  # 0x1E 	Move 2's PP values 	1 byte
-                0x0D,  # 0x1F 	Move 3's PP values 	1 byte
-                0x1C,  # 0x20 	Move 4's PP values 	1 byte
+                0x08,  # 0x1D 	Move 1's PP values 	1 byte 0 PP ups
+                0x49,  # 0x1E 	Move 2's PP values 	1 byte 1 PP up
+                0x8D,  # 0x1F 	Move 3's PP values 	1 byte 2 PP ups
+                0xDE,  # 0x20 	Move 4's PP values 	1 byte 3 PP ups
                 0x40,  # 0x21 	Level 	            1 byte
                 0x01,  # 0x22 	Maximum HP 	        2 bytes
                 0x02,
@@ -71,13 +71,13 @@ class TestPokemonDisplay(unittest.TestCase):
         self.assertEqual(15, self.pokemon.move1_max_pp)
         self.assertEqual("Thunder Punch", self.pokemon.move2)
         self.assertEqual(9, self.pokemon.move2_pp)
-        self.assertEqual(15, self.pokemon.move2_max_pp)
+        self.assertEqual(16, self.pokemon.move2_max_pp)
         self.assertEqual("Scratch", self.pokemon.move3)
         self.assertEqual(13, self.pokemon.move3_pp)
-        self.assertEqual(35, self.pokemon.move3_max_pp)
+        self.assertEqual(37, self.pokemon.move3_max_pp)
         self.assertEqual("Vise Grip", self.pokemon.move4)
-        self.assertEqual(28, self.pokemon.move4_pp)
-        self.assertEqual(30, self.pokemon.move4_max_pp)
+        self.assertEqual(30, self.pokemon.move4_pp)
+        self.assertEqual(33, self.pokemon.move4_max_pp)
         self.assertEqual(262145, self.pokemon.xp)
         self.assertEqual("Medium Fast", self.pokemon.experience_type)
         self.assertEqual(12480, self.pokemon.xp_to_next_level())
@@ -100,9 +100,9 @@ akt/def/spd/spec: 69/420/1337/31415
 
 Moves:
  - Ice Punch (8/15)
- - Thunder Punch (9/15)
- - Scratch (13/35)
- - Vise Grip (28/30)
+ - Thunder Punch (9/16)
+ - Scratch (13/37)
+ - Vise Grip (30/33)
 
 Caught by: Green
 """,
