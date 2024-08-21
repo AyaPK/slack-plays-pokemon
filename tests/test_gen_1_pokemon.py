@@ -1,7 +1,7 @@
 import unittest
 
+from src.integration.byte_mappings import EXPERIENCE_TYPES, GEN_1_SPECIES
 from src.integration.gen_1_pokemon import Pokemon
-from src.integration.byte_mappings import GEN_1_SPECIES, EXPERIENCE_TYPES
 
 
 class TestPokemonDisplay(unittest.TestCase):
@@ -39,21 +39,21 @@ class TestPokemonDisplay(unittest.TestCase):
                 0x1A,  # 0x19 	Special EV data 	2 bytes
                 0x1B,
                 0x1C,  # 0x1B 	IV data 	2 bytes
-                0x1D,  # 0x1D 	Move 1's PP values 	1 byte
-                0x1E,  # 0x1E 	Move 2's PP values 	1 byte
-                0x1F,  # 0x1F 	Move 3's PP values 	1 byte
-                0x20,  # 0x20 	Move 4's PP values 	1 byte
-                0x40,  # 0x21 	Level 	1 byte
-                0x01,
-                0x02,  # 0x22 	Maximum HP 	2 bytes
-                0x24,
-                0x25,  # 0x24 	Attack 	2 bytes
-                0x26,
-                0x27,  # 0x26 	Defense 	2 bytes
-                0x28,
-                0x29,  # 0x28 	Speed 	2 bytes
-                0x2A,
-                0x2B,  # 0x2A 	Special 	2 bytes
+                0x08,  # 0x1D 	Move 1's PP values 	1 byte 0 PP ups
+                0x49,  # 0x1E 	Move 2's PP values 	1 byte 1 PP up
+                0x8D,  # 0x1F 	Move 3's PP values 	1 byte 2 PP ups
+                0xDE,  # 0x20 	Move 4's PP values 	1 byte 3 PP ups
+                0x40,  # 0x21 	Level 	            1 byte
+                0x01,  # 0x22 	Maximum HP 	        2 bytes
+                0x02,
+                0x00,  # 0x24 	Attack 	2 bytes
+                0x45,
+                0x01,  # 0x26 	Defense 2 bytes
+                0xA4,
+                0x05,  # 0x28 	Speed 	2 bytes
+                0x39,
+                0x7A,  # 0x2A 	Special 2 bytes
+                0xB7,
             ],
         )
 
@@ -67,9 +67,17 @@ class TestPokemonDisplay(unittest.TestCase):
         self.assertEqual("Healthy", self.pokemon.status)
         self.assertEqual("Fighting - Flying", self.pokemon.type)
         self.assertEqual("Ice Punch", self.pokemon.move1)
+        self.assertEqual(8, self.pokemon.move1_pp)
+        self.assertEqual(15, self.pokemon.move1_max_pp)
         self.assertEqual("Thunder Punch", self.pokemon.move2)
+        self.assertEqual(9, self.pokemon.move2_pp)
+        self.assertEqual(16, self.pokemon.move2_max_pp)
         self.assertEqual("Scratch", self.pokemon.move3)
+        self.assertEqual(13, self.pokemon.move3_pp)
+        self.assertEqual(37, self.pokemon.move3_max_pp)
         self.assertEqual("Vise Grip", self.pokemon.move4)
+        self.assertEqual(30, self.pokemon.move4_pp)
+        self.assertEqual(33, self.pokemon.move4_max_pp)
         self.assertEqual(262145, self.pokemon.xp)
         self.assertEqual("Medium Fast", self.pokemon.experience_type)
         self.assertEqual(12480, self.pokemon.xp_to_next_level())
@@ -88,11 +96,13 @@ Status: Healthy
 
 Level: 64 (12480 XP to next level)
 
+akt/def/spd/spec: 69/420/1337/31415
+
 Moves:
- - Ice Punch
- - Thunder Punch
- - Scratch
- - Vise Grip
+ - Ice Punch (8/15)
+ - Thunder Punch (9/16)
+ - Scratch (13/37)
+ - Vise Grip (30/33)
 
 Caught by: Green
 """,
@@ -100,7 +110,7 @@ Caught by: Green
 
     def test_nidoran(self):
         self.pokemon.species = GEN_1_SPECIES[0x03]
-        self.pokemon.experience_type =  EXPERIENCE_TYPES[GEN_1_SPECIES[0x03]]
+        self.pokemon.experience_type = EXPERIENCE_TYPES[GEN_1_SPECIES[0x03]]
         self.assertEqual("Nidoran♂", self.pokemon.species)
         self.assertEqual(10390, self.pokemon.xp_to_next_level())
 

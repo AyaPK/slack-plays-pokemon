@@ -6,6 +6,7 @@ from integration.byte_mappings import (
     GEN_1_ITEMS,
     GEN_1_MOVES,
     GEN_1_SPECIES,
+    MOVE_BASE_PP,
     STATUS_BIT_FIELD,
     TYPE_MAP,
 )
@@ -19,12 +20,24 @@ class Pokemon:
     hp: int
     max_hp: int
     level: int
+    attack: int
+    defense: int
+    speed: int
+    special: int
     status: str
     type: str
     move1: str
+    move1_pp: int
+    move1_max_pp: int
     move2: str
+    move2_pp: int
+    move2_max_pp: int
     move3: str
+    move3_pp: int
+    move3_max_pp: int
     move4: str
+    move4_pp: int
+    move4_max_pp: int
     xp: int
     experience_type: str
 
@@ -37,14 +50,30 @@ class Pokemon:
             hp=int.from_bytes(buffer[0x1 : 0x1 + 2]),
             max_hp=int.from_bytes(buffer[0x22 : 0x22 + 2]),
             level=int(buffer[0x21]),
+            attack=int.from_bytes(buffer[0x24 : 0x24 + 2]),
+            defense=int.from_bytes(buffer[0x26 : 0x26 + 2]),
+            speed=int.from_bytes(buffer[0x28 : 0x28 + 2]),
+            special=int.from_bytes(buffer[0x2A : 0x2A + 2]),
             status=cls._status_from_bit_field(buffer[0x4]),
             type=cls._type_from_bytes(buffer[0x5], buffer[0x6]),
             move1=GEN_1_MOVES[buffer[0x8]],
+            move1_pp=(int(buffer[0x1D]) & 0x3F),
+            move1_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0x8]]]
+            + ((int(buffer[0x1D]) >> 6) & 0x03),
             move2=GEN_1_MOVES[buffer[0x9]],
+            move2_pp=(int(buffer[0x1E]) & 0x3F),
+            move2_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0x9]]]
+            + ((int(buffer[0x1E]) >> 6) & 0x03),
             move3=GEN_1_MOVES[buffer[0xA]],
+            move3_pp=(int(buffer[0x1F]) & 0x3F),
+            move3_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0xA]]]
+            + ((int(buffer[0x1F]) >> 6) & 0x03),
             move4=GEN_1_MOVES[buffer[0xB]],
-            xp=int.from_bytes(buffer[0x0e: 0x0e + 3]),
-            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]]
+            move4_pp=(int(buffer[0x20]) & 0x3F),
+            move4_max_pp=MOVE_BASE_PP[GEN_1_MOVES[buffer[0xB]]]
+            + ((int(buffer[0x20]) >> 6) & 0x03),
+            xp=int.from_bytes(buffer[0x0E : 0x0E + 3]),
+            experience_type=EXPERIENCE_TYPES[GEN_1_SPECIES[int(buffer[0x0])]],
         )
 
     @staticmethod
@@ -81,11 +110,13 @@ Status: {self.status}
 
 Level: {self.level} ({self.xp_to_next_level()} XP to next level)
 
+akt/def/spd/spec: {self.attack}/{self.defense}/{self.speed}/{self.special}
+
 Moves:
-{f" - {self.move1}" if self.move1 else ""}
-{f" - {self.move2}" if self.move2 else ""}
-{f" - {self.move3}" if self.move3 else ""}
-{f" - {self.move4}" if self.move4 else ""}
+{f" - {self.move1} ({self.move1_pp}/{self.move1_max_pp})" if self.move1 else ""}
+{f" - {self.move2} ({self.move2_pp}/{self.move2_max_pp})" if self.move2 else ""}
+{f" - {self.move3} ({self.move3_pp}/{self.move3_max_pp})" if self.move3 else ""}
+{f" - {self.move4} ({self.move4_pp}/{self.move4_max_pp})" if self.move4 else ""}
 
 Caught by: {self.caught_by}
 """
@@ -185,10 +216,10 @@ def _bytes_as_gen1_string(data) -> str:
 def _xp_required_for_level(experience_type: str, level: int) -> int:
     match experience_type:
         case "Fast":
-            return int(0.8 * level ** 3)
+            return int(0.8 * level**3)
         case "Medium Fast":
-            return int(level ** 3)
+            return int(level**3)
         case "Medium Slow":
-            return int(1.2 * level ** 3 - 15 * level ** 2 + 100 * level - 140)
+            return int(1.2 * level**3 - 15 * level**2 + 100 * level - 140)
         case "Slow":
-            return int(1.25 * level ** 3)
+            return int(1.25 * level**3)
