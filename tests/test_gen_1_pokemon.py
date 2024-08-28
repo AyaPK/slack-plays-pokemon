@@ -96,7 +96,7 @@ Status: Healthy
 
 Level: 64 (12480 XP to next level)
 
-akt/def/spd/spec: 69/420/1337/31415
+atk/def/spd/spec: 69/420/1337/31415
 
 Moves:
  - Ice Punch (8/15)
