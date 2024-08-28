@@ -750,7 +750,7 @@ MOVE_BASE_PP = {
     "Fury Swipes": 15,
     "Glare": 30,
     "Growl": 40,
-    "Growth": 20,
+    "Growth": 40,
     "Guillotine": 5,
     "Gust": 35,
     "Harden": 30,
