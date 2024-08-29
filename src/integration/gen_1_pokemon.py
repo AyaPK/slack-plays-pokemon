@@ -110,7 +110,7 @@ Status: {self.status}
 
 Level: {self.level} ({self.xp_to_next_level()} XP to next level)
 
-akt/def/spd/spec: {self.attack}/{self.defense}/{self.speed}/{self.special}
+atk/def/spd/spec: {self.attack}/{self.defense}/{self.speed}/{self.special}
 
 Moves:
 {f" - {self.move1} ({self.move1_pp}/{self.move1_max_pp})" if self.move1 else ""}
