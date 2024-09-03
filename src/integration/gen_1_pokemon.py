@@ -9,6 +9,7 @@ from integration.byte_mappings import (
     MOVE_BASE_PP,
     STATUS_BIT_FIELD,
     TYPE_MAP,
+    CHARACTER_ENCODING,
 )
 
 
@@ -205,7 +206,7 @@ def _bytes_as_gen1_string(data) -> str:
         for byte in data:
             if byte == STRING_TERMINATOR:
                 break
-            text += chr(byte - ASCII_DELTA)
+            text += CHARACTER_ENCODING[byte]
     except:
         text = "UNKNOWN"
 
