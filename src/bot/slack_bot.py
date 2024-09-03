@@ -53,9 +53,9 @@ def start_timer(client, say, event):
     global timer_active
 
     timer_active = True
-    print(f"{TIMER_DURATION} second timer started...")
+    # print(f"{TIMER_DURATION} second timer started...")
     time.sleep(TIMER_DURATION)
-    print(f"{TIMER_DURATION} second timer complete!")
+    # print(f"{TIMER_DURATION} second timer complete!")
 
     timer_active = False
 

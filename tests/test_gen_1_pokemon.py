@@ -1,7 +1,7 @@
 import unittest
 
 from src.integration.byte_mappings import EXPERIENCE_TYPES, GEN_1_SPECIES
-from src.integration.gen_1_pokemon import Pokemon
+from src.integration.gen_1_pokemon import Pokemon, _bytes_as_gen1_string
 
 
 class TestPokemonDisplay(unittest.TestCase):
@@ -113,6 +113,19 @@ Caught by: Green
         self.pokemon.experience_type = EXPERIENCE_TYPES[GEN_1_SPECIES[0x03]]
         self.assertEqual("Nidoran♂", self.pokemon.species)
         self.assertEqual(10390, self.pokemon.xp_to_next_level())
+
+    def test_character_encoding(self):
+        name_1 = [146, 133, 147, 150, 136, 145, 132, 80, 0, 0, 0]
+        self.assertEqual("SFTWIRE", _bytes_as_gen1_string(name_1))
+
+        name_2 = [128, 184, 160, 231, 231]
+        self.assertEqual("Aya!!", _bytes_as_gen1_string(name_2))
+
+        name_3 = [230, 231, 239, 245, 225, 226]
+        self.assertEqual("?!♂♀PkMn", _bytes_as_gen1_string(name_3))
+
+        name_4 = [130, 128, 147, 230, 231, 231, 230, 230, 231, 245]
+        self.assertEqual("CAT?!!??!♀", _bytes_as_gen1_string(name_4))
 
 
 if __name__ == "__main__":

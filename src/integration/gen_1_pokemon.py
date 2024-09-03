@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List, Self
 
 from integration.byte_mappings import (
+    CHARACTER_ENCODING,
     EXPERIENCE_TYPES,
     GEN_1_ITEMS,
     GEN_1_MOVES,
@@ -205,7 +206,7 @@ def _bytes_as_gen1_string(data) -> str:
         for byte in data:
             if byte == STRING_TERMINATOR:
                 break
-            text += chr(byte - ASCII_DELTA)
+            text += CHARACTER_ENCODING[byte]
     except:
         text = "UNKNOWN"
 
