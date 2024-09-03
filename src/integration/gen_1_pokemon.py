@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List, Self
 
 from integration.byte_mappings import (
+    CHARACTER_ENCODING,
     EXPERIENCE_TYPES,
     GEN_1_ITEMS,
     GEN_1_MOVES,
@@ -9,7 +10,6 @@ from integration.byte_mappings import (
     MOVE_BASE_PP,
     STATUS_BIT_FIELD,
     TYPE_MAP,
-    CHARACTER_ENCODING,
 )
 
 

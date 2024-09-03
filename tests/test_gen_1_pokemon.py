@@ -127,5 +127,6 @@ Caught by: Green
         name_4 = [130, 128, 147, 230, 231, 231, 230, 230, 231, 245]
         self.assertEqual("CAT?!!??!♀", _bytes_as_gen1_string(name_4))
 
+
 if __name__ == "__main__":
     unittest.main()
