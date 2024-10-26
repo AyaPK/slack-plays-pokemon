@@ -10,6 +10,14 @@ Emulates Pokémon gen 1 in a Slack channel, allowing a group of players to colla
 SlackPlaysPokémon uses poetry for Python to create an isolated environment and manage package dependencies.
 Before continuing, ensure you have installed Python version 3.12 or above.
 
+## Docker
+
+This project is dockerised if that is to your taste. Ensuring Docker is installed, run:
+```bash
+docker compose up
+```
+from the project root to build and run the project.
+
 ### Poetry installation (Bash)
 
 ```bash
