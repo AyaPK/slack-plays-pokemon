@@ -48,6 +48,7 @@ def handle_reaction_added(event, say, client):
     if not timer_active:
         start_timer(client, say, event)
 
+
 @app.command("/refresh")
 def refresh_post(ack, say, client, command):
     global timer_active
@@ -58,7 +59,10 @@ def refresh_post(ack, say, client, command):
         if not timer_active:
             handle_input(event, say, client, "")
     else:
-        say(text=f"Sorry, you don't have permission to use the {command['command']} command", channel=command["user_id"])
+        say(
+            text=f"Sorry, you don't have permission to use the {command['command']} command",
+            channel=command["user_id"],
+        )
 
 
 def user_is_admin(user_id):
