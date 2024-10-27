@@ -22,7 +22,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 1
+TIMER_DURATION = 15
 timer_active = False
 
 
@@ -74,9 +74,9 @@ def start_timer(client, say, event):
     global timer_active
 
     timer_active = True
-    print(f"{TIMER_DURATION} second timer started...")
+    # print(f"{TIMER_DURATION} second timer started...")
     time.sleep(TIMER_DURATION)
-    print(f"{TIMER_DURATION} second timer complete!")
+    # print(f"{TIMER_DURATION} second timer complete!")
 
     timer_active = False
 
