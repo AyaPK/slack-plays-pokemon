@@ -7,6 +7,7 @@ class StateManager:
         self.last_message = None
         self.canvas = None
         self.game_info = None
+        self.last_event = None
 
 
 def save_state(manager, filename="data/state_manager.pkl"):
