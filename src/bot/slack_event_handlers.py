@@ -28,6 +28,7 @@ def handle_input(event, say, client: WebClient, button):
     time.sleep(3)
     last_message = say("Vote for the next input:")
     state_manager.last_message = last_message
+    state_manager.last_event = event
 
     save_state(state_manager)
 

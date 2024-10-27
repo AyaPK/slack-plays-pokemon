@@ -22,7 +22,7 @@ if not SLACK_TOKEN or not SLACK_XAPP or not VALID_REACTIONS:
 
 app = App(token=SLACK_TOKEN)
 
-TIMER_DURATION = 15
+TIMER_DURATION = 1
 timer_active = False
 
 
@@ -49,13 +49,34 @@ def handle_reaction_added(event, say, client):
         start_timer(client, say, event)
 
 
+@app.command("/refresh")
+def refresh_post(ack, say, client, command):
+    global timer_active
+    ack()
+
+    if user_is_admin(command["user_id"]):
+        event = state_manager.last_event
+        if not timer_active:
+            handle_input(event, say, client, "")
+    else:
+        say(
+            text="Sorry, you don't have permission to use the "
+            f"{command['command']} command",
+            channel=command["user_id"],
+        )
+
+
+def user_is_admin(user_id):
+    return user_id in os.getenv("ADMIN_IDS").split(",")
+
+
 def start_timer(client, say, event):
     global timer_active
 
     timer_active = True
-    # print(f"{TIMER_DURATION} second timer started...")
+    print(f"{TIMER_DURATION} second timer started...")
     time.sleep(TIMER_DURATION)
-    # print(f"{TIMER_DURATION} second timer complete!")
+    print(f"{TIMER_DURATION} second timer complete!")
 
     timer_active = False
 
