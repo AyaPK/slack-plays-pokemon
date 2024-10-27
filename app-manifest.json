@@ -8,20 +8,33 @@
         "bot_user": {
             "display_name": "SlackPlaysPokemon",
             "always_online": true
-        }
+        },
+        "slash_commands": [
+            {
+                "command": "/refresh",
+                "description": "Creates a no-input post",
+                "usage_hint": "For when the input post has disappeared",
+                "should_escape": false
+            }
+        ]
     },
     "oauth_config": {
         "scopes": {
             "bot": [
                 "app_mentions:read",
+                "canvases:write",
+                "channels:history",
+                "channels:read",
                 "chat:write",
+                "commands",
+                "files:read",
                 "files:write",
+                "groups:read",
+                "im:read",
+                "mpim:read",
                 "reactions:read",
                 "reactions:write",
-                "channels:read",
-                "groups:read",
-                "mpim:read",
-                "im:read"
+                "im:write"
             ]
         }
     },
