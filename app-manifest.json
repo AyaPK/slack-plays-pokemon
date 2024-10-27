@@ -1,0 +1,42 @@
+{
+    "display_information": {
+        "name": "SlackPlaysPokémon",
+        "description": "Playing Pokémon collaboratively",
+        "background_color": "#ff00ff"
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "SlackPlaysPokemon",
+            "always_online": true
+        }
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "app_mentions:read",
+                "chat:write",
+                "files:write",
+                "reactions:read",
+                "reactions:write",
+                "channels:read",
+                "groups:read",
+                "mpim:read",
+                "im:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "bot_events": [
+                "app_mention",
+                "reaction_added"
+            ]
+        },
+        "interactivity": {
+            "is_enabled": true
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": true,
+        "token_rotation_enabled": false
+    }
+}

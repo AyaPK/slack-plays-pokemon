@@ -61,25 +61,11 @@ $ poetry run lint
 
 ## Slack App
 SlackPlaysPokémon is a Python Bolt app.
-Create a Slack app with the appropriate read/write permissions and socket mode enabled, then add the `xoxb` and `xapp` tokens to the appropriate environment variables in the `.env` file.
+Create a Slack app using the App Manifest found in `app-manifest.json`.
 
-#### Oauth permissions required:
-- reactions:read
-- reactions:write
-- chat:write
-- files:write
-- app_mentions:read
-- channels:read
-- canvases:write
-- groups:read
-- im:read
-- mpim:read
+This manifest can be customised as necesarry, but ensure you don't change any required permissions, the manifest provides the minimum permissions required to run.
 
-#### Socket mode event subscriptions required:
-- app_mention
-- reaction_added
-
-## Slack server
+## Slack instance
 This currently works out-of-the-box for the most part, however a few changes may need to be made to allow the bot to function properly.
 
 - A custom react named `:start:`
